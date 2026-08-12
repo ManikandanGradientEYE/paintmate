@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model HomeSize {
+  id        String @id @default(cuid())
+  label     String
+  sublabel  String
+  sqft      Int
+  sortOrder Int    @default(0)
+}
+
+model Paint {
+  id             String  @id @default(cuid())
+  name           String
+  brand          String
+  pricePerLitre  Float
+  tier           String
+  recommended    Boolean @default(false)
+  isJiwan        Boolean @default(false)
+  approxPrice    Boolean @default(false)
+  // Comma-separated surfaces, e.g. "interior,exterior" — kept as a plain string
+  // (rather than Postgres's native String[]) so lib/mappers.ts works unchanged
+  // if this ever moves to a provider without list support again.
+  surfaces       String
+  whyPick        String?
+  sortOrder      Int     @default(0)
+}
+
+model Shade {
+  id        String @id @default(cuid())
+  code      String @unique
+  hex       String
+  category  String
+  sortOrder Int    @default(0)
+}
+
+model AddOn {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  label     String
+  defaultOn Boolean @default(false)
+  priced    Boolean @default(false)
+  sortOrder Int     @default(0)
+}
+
+model CatalogProduct {
+  id            String @id @default(cuid())
+  categoryLabel String
+  name          String
+  description   String
+  swatch        String
+  cta           String
+  sortOrder     Int    @default(0)
+}
+
+model PricingSetting {
+  id                                String @id @default("singleton")
+  paintCoverageSqftPerLitrePerCoat  Float  @default(133.33)
+  primerCoverageSqftPerLitre        Float  @default(125)
+  primerPriceInterior               Float  @default(70)
+  primerPriceExterior               Float  @default(85)
+  gstRate                           Float  @default(0.18)
+  deliveryFeeLudhiana               Float  @default(99)
+  estimateRangePct                  Float  @default(0.06)
+  puttyBagKg                        Float  @default(30)
+  puttyPricePerBag                  Float  @default(515)
+  puttyCoverageSqftPerKg            Float  @default(11.11)
+}
+
+model Lead {
+  id                 String   @id @default(cuid())
+  name               String
+  phone              String
+  locality           String?
+  homeSizeLabel      String?
+  areaSqft           Int
+  surface            String
+  coats              Int
+  paintName          String
+  paintBrand         String
+  paintPricePerLitre Float
+  addOnPutty         Boolean
+  addOnPrimer        Boolean
+  addOnPainter       Boolean
+  shadeCode          String?
+  estimateTotal      Float
+  estimateRangeLow   Float
+  estimateRangeHigh  Float
+  status             String   @default("new")
+  notes              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
