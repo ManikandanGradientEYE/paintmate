@@ -28,31 +28,30 @@ export default function StickyBar() {
       )}
 
       <div className="relative z-40 border-t border-line bg-white">
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          aria-expanded={expanded}
-          className="flex w-full items-center justify-center gap-1.5 pt-1.5 text-[11px] font-bold tracking-wide text-ink-faint"
-        >
-          {expanded ? "HIDE BREAKDOWN" : "VIEW BREAKDOWN"}
-          <span
-            className={`inline-block text-sm leading-none transition-transform ${
-              expanded ? "rotate-180" : ""
-            }`}
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            aria-label={expanded ? "Hide estimate breakdown" : "View estimate breakdown"}
+            className="flex items-center gap-2"
           >
-            ▲
-          </span>
-        </button>
-
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 pb-3 pt-1 md:px-6">
-          <div>
-            <p className="text-[11px] font-bold tracking-wider text-ink-faint">
-              ESTIMATED TOTAL
-            </p>
-            <p className="text-lg font-extrabold text-forest">
-              {formatINR(estimate.total)}
-            </p>
-          </div>
+            <div className="text-left">
+              <p className="text-[11px] font-bold tracking-wider text-ink-faint">
+                ESTIMATED TOTAL
+              </p>
+              <p className="text-lg font-extrabold text-forest">
+                {formatINR(estimate.total)}
+              </p>
+            </div>
+            <span
+              className={`text-sm text-ink-faint transition-transform ${
+                expanded ? "rotate-180" : ""
+              }`}
+            >
+              ▲
+            </span>
+          </button>
           <a
             href="#contact"
             onClick={() => setExpanded(false)}
