@@ -51,14 +51,18 @@ export default async function Home() {
   return (
     <QuoteProvider siteData={siteData}>
       <Header />
-      <main className="mx-auto max-w-3xl px-4 pb-28 pt-6 md:px-6">
+      <main className="mx-auto max-w-3xl px-4 pb-28 pt-6 md:px-6 lg:max-w-6xl">
         <Hero />
-        <div className="mt-8 flex flex-col gap-6">
-          <CalculatorSection />
-          <PaintSection />
-          <ShadeSection />
-          <EstimateCard />
-          <LocationSection />
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px] lg:items-start">
+          <div className="flex flex-col gap-6">
+            <CalculatorSection />
+            <PaintSection />
+            <ShadeSection />
+            <LocationSection />
+          </div>
+          <div className="hidden lg:sticky lg:top-28 lg:block">
+            <EstimateCard />
+          </div>
         </div>
         <MoreProducts products={siteData.catalogProducts} />
         <JiwanStory />

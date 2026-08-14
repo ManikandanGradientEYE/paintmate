@@ -8,7 +8,7 @@ export default function EstimateCard() {
   const { state, selectedPaint, estimate } = useQuote();
 
   return (
-    <Card id="estimate">
+    <Card>
       <p className="text-[11px] font-bold tracking-wider text-brand-pink">
         YOUR ESTIMATE
       </p>
