@@ -4,35 +4,99 @@ import { useState } from "react";
 import { adminFetch } from "@/lib/adminFetch";
 import { PricingSettings } from "@/types";
 
-const FIELDS: { key: keyof PricingSettings; label: string; help: string; step?: number }[] = [
+interface FieldDef {
+  key: keyof PricingSettings;
+  label: string;
+  help?: string;
+  step?: number;
+  suffix?: string;
+}
+
+interface GroupDef {
+  title: string;
+  description?: string;
+  fields: FieldDef[];
+}
+
+const GROUPS: GroupDef[] = [
   {
-    key: "paintCoverageSqftPerLitrePerCoat",
-    label: "Paint coverage (sq ft / litre / coat)",
-    help: "How much wall area one litre of paint covers per coat.",
+    title: "Paint",
+    description: "How far the selected paint stretches.",
+    fields: [
+      {
+        key: "paintCoverageSqftPerLitrePerCoat",
+        label: "Paint coverage",
+        help: "How much wall area one litre covers, per coat.",
+        suffix: "sq ft / L / coat",
+      },
+    ],
   },
   {
-    key: "primerCoverageSqftPerLitre",
-    label: "Primer coverage (sq ft / litre)",
-    help: "Primer is always calculated as a single coat.",
+    title: "Primer",
+    description: "Primer is always calculated as a single coat.",
+    fields: [
+      {
+        key: "primerCoverageSqftPerLitre",
+        label: "Primer coverage",
+        suffix: "sq ft / L",
+      },
+      {
+        key: "primerPriceInterior",
+        label: "Interior primer price",
+        suffix: "₹ / L",
+      },
+      {
+        key: "primerPriceExterior",
+        label: "Exterior primer price",
+        suffix: "₹ / L",
+      },
+    ],
   },
-  { key: "primerPriceInterior", label: "Interior primer price (₹/L)", help: "" },
-  { key: "primerPriceExterior", label: "Exterior primer price (₹/L)", help: "" },
   {
-    key: "gstRate",
-    label: "GST rate",
-    help: "As a fraction, e.g. 0.18 for 18%.",
-    step: 0.01,
+    title: "Wall putty",
+    description: "Used when the Wall putty add-on is selected.",
+    fields: [
+      {
+        key: "puttyCoverageSqftPerKg",
+        label: "Putty coverage",
+        suffix: "sq ft / kg",
+      },
+      { key: "puttyBagKg", label: "Bag size", suffix: "kg / bag" },
+      {
+        key: "puttyPricePerBag",
+        label: "Price per bag",
+        help: "Incl. GST.",
+        suffix: "₹ / bag",
+      },
+    ],
   },
-  { key: "deliveryFeeLudhiana", label: "Delivery fee within Ludhiana (₹)", help: "" },
   {
-    key: "estimateRangePct",
-    label: "Estimate range (± fraction)",
-    help: "e.g. 0.06 shows a ±6% range around the total.",
-    step: 0.01,
+    title: "Tax & delivery",
+    fields: [
+      {
+        key: "gstRate",
+        label: "GST rate",
+        help: "As a fraction, e.g. 0.18 for 18%.",
+        step: 0.01,
+      },
+      {
+        key: "deliveryFeeLudhiana",
+        label: "Delivery fee within Ludhiana",
+        suffix: "₹",
+      },
+    ],
   },
-  { key: "puttyBagKg", label: "Putty bag size (kg)", help: "" },
-  { key: "puttyPricePerBag", label: "Putty price per bag (₹, incl. GST)", help: "" },
-  { key: "puttyCoverageSqftPerKg", label: "Putty coverage (sq ft / kg)", help: "" },
+  {
+    title: "Estimate display",
+    fields: [
+      {
+        key: "estimateRangePct",
+        label: "Estimate range",
+        help: "e.g. 0.06 shows a ±6% range around the total.",
+        step: 0.01,
+      },
+    ],
+  },
 ];
 
 export default function PricingEditor({ initial }: { initial: PricingSettings }) {
@@ -57,35 +121,49 @@ export default function PricingEditor({ initial }: { initial: PricingSettings })
   }
 
   return (
-    <div className="mt-6">
-      <div className="grid grid-cols-1 gap-4 rounded-2xl border border-line bg-white p-5 sm:grid-cols-2">
-        {FIELDS.map((field) => (
-          <div key={field.key}>
-            <label className="block text-xs font-bold text-ink-muted">{field.label}</label>
-            <input
-              type="number"
-              step={field.step ?? 0.01}
-              value={draft[field.key]}
-              onChange={(e) =>
-                setDraft({ ...draft, [field.key]: Number(e.target.value) })
-              }
-              className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-forest"
-            />
-            {field.help && <p className="mt-1 text-xs text-ink-faint">{field.help}</p>}
-          </div>
-        ))}
-      </div>
+    <div className="mt-6 flex flex-col gap-4">
+      {GROUPS.map((group) => (
+        <div key={group.title} className="rounded-2xl border border-line bg-white p-5">
+          <h2 className="text-sm font-bold text-ink">{group.title}</h2>
+          {group.description && (
+            <p className="mt-0.5 text-xs text-ink-faint">{group.description}</p>
+          )}
 
-      {error && <p className="mt-3 text-sm font-semibold text-brand-pink">{error}</p>}
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {group.fields.map((field) => (
+              <div key={field.key}>
+                <label className="block text-xs font-bold text-ink-muted">
+                  {field.label}
+                  {field.suffix && (
+                    <span className="font-normal text-ink-faint"> ({field.suffix})</span>
+                  )}
+                </label>
+                <input
+                  type="number"
+                  step={field.step ?? 0.01}
+                  value={draft[field.key]}
+                  onChange={(e) =>
+                    setDraft({ ...draft, [field.key]: Number(e.target.value) })
+                  }
+                  className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-forest"
+                />
+                {field.help && <p className="mt-1 text-xs text-ink-faint">{field.help}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {error && <p className="text-sm font-semibold text-brand-pink">{error}</p>}
       {status === "saved" && (
-        <p className="mt-3 text-sm font-semibold text-forest">Saved.</p>
+        <p className="text-sm font-semibold text-forest">Saved.</p>
       )}
 
       <button
         type="button"
         onClick={handleSave}
         disabled={status === "saving"}
-        className="mt-4 rounded-full bg-forest px-6 py-3 text-sm font-bold text-white disabled:opacity-60"
+        className="self-start rounded-full bg-forest px-6 py-3 text-sm font-bold text-white disabled:opacity-60"
       >
         {status === "saving" ? "Saving..." : "Save pricing"}
       </button>
