@@ -17,13 +17,14 @@ export async function PATCH(
       { status: 400 }
     );
   }
-  const { surfaces, whyPick, ...rest } = parsed.data;
+  const { surfaces, whyPick, imageUrl, ...rest } = parsed.data;
   const row = await prisma.paint.update({
     where: { id: params.id },
     data: {
       ...rest,
       ...(surfaces ? { surfaces: surfacesToDb(surfaces) } : {}),
       ...(whyPick !== undefined ? { whyPick } : {}),
+      ...(imageUrl !== undefined ? { imageUrl } : {}),
     },
   });
   return NextResponse.json(toPaint(row));

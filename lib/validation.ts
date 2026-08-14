@@ -39,6 +39,7 @@ export const paintSchema = z.object({
   approxPrice: z.boolean().default(false),
   surfaces: z.array(z.enum(["interior", "exterior"])).min(1),
   whyPick: z.string().trim().max(400).nullable().optional(),
+  imageUrl: z.string().trim().max(1000).nullable().optional(),
   sortOrder: z.number().int().optional().default(0),
 });
 

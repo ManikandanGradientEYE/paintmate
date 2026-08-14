@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { adminFetch } from "@/lib/adminFetch";
+import PaintThumb from "@/components/ui/PaintThumb";
 import { Paint, Surface, Tier } from "@/types";
 
 type Draft = {
@@ -14,6 +15,7 @@ type Draft = {
   approxPrice: boolean;
   surfaces: Surface[];
   whyPick: string;
+  imageUrl: string;
   sortOrder: number;
 };
 
@@ -28,6 +30,7 @@ function toDraft(item: Paint): Draft {
     approxPrice: item.approxPrice,
     surfaces: item.surfaces,
     whyPick: item.whyPick ?? "",
+    imageUrl: item.imageUrl ?? "",
     sortOrder: item.sortOrder,
   };
 }
@@ -42,6 +45,7 @@ const EMPTY_DRAFT: Draft = {
   approxPrice: false,
   surfaces: ["interior"],
   whyPick: "",
+  imageUrl: "",
   sortOrder: 0,
 };
 
@@ -62,6 +66,15 @@ function PaintForm({
 
   return (
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <div className="flex items-center gap-2 sm:col-span-2">
+        <PaintThumb src={draft.imageUrl} alt={draft.name || "Paint"} size={40} />
+        <input
+          value={draft.imageUrl}
+          onChange={(e) => onChange({ imageUrl: e.target.value })}
+          placeholder="Image URL (optional)"
+          className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-forest"
+        />
+      </div>
       <input
         value={draft.name}
         onChange={(e) => onChange({ name: e.target.value })}
@@ -163,7 +176,11 @@ export default function PaintsEditor({ initialItems }: { initialItems: Paint[] }
     const draft = drafts[id]!;
     const result = await adminFetch<Paint>(`/api/admin/paints/${id}`, {
       method: "PATCH",
-      body: JSON.stringify({ ...draft, whyPick: draft.whyPick || null }),
+      body: JSON.stringify({
+        ...draft,
+        whyPick: draft.whyPick || null,
+        imageUrl: draft.imageUrl || null,
+      }),
     });
     setBusyId(null);
     if (!result.ok) return setError(result.error);
@@ -183,7 +200,11 @@ export default function PaintsEditor({ initialItems }: { initialItems: Paint[] }
     setError(null);
     const result = await adminFetch<Paint>("/api/admin/paints", {
       method: "POST",
-      body: JSON.stringify({ ...newDraft, whyPick: newDraft.whyPick || null }),
+      body: JSON.stringify({
+        ...newDraft,
+        whyPick: newDraft.whyPick || null,
+        imageUrl: newDraft.imageUrl || null,
+      }),
     });
     setBusyId(null);
     if (!result.ok) return setError(result.error);

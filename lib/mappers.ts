@@ -44,6 +44,7 @@ export function toPaint(row: PaintRow): Paint {
     approxPrice: row.approxPrice,
     surfaces: row.surfaces.split(",").filter(Boolean) as Surface[],
     whyPick: row.whyPick,
+    imageUrl: row.imageUrl,
     sortOrder: row.sortOrder,
   };
 }

@@ -24,6 +24,7 @@ export interface Paint {
   approxPrice: boolean;
   surfaces: Surface[];
   whyPick: string | null;
+  imageUrl: string | null;
   sortOrder: number;
 }
 

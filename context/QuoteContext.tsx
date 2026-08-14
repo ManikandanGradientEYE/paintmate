@@ -166,6 +166,7 @@ export function QuoteProvider({
       approxPrice: false,
       surfaces: ["interior"],
       whyPick: null,
+      imageUrl: null,
       sortOrder: 0,
     };
     const selectedPaint =

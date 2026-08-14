@@ -30,6 +30,7 @@ model Paint {
   // if this ever moves to a provider without list support again.
   surfaces       String
   whyPick        String?
+  imageUrl       String?
   sortOrder      Int     @default(0)
 }
 

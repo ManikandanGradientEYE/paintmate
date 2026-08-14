@@ -1,3 +1,4 @@
+import PaintThumb from "@/components/ui/PaintThumb";
 import { formatINR } from "@/lib/format";
 import { Paint } from "@/types";
 
@@ -21,6 +22,7 @@ export default function OtherBrandRow({
       <span
         className={`h-2.5 w-2.5 shrink-0 rounded-full ${active ? "bg-forest" : "bg-sky"}`}
       />
+      <PaintThumb src={paint.imageUrl} alt={paint.name} size={32} />
       <span className="flex-1">
         <span className="block text-sm font-bold text-ink">{paint.name}</span>
         <span className="mt-0.5 block text-xs text-ink-muted">

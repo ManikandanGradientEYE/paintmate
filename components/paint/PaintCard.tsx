@@ -1,3 +1,4 @@
+import PaintThumb from "@/components/ui/PaintThumb";
 import { formatINR } from "@/lib/format";
 import { Paint } from "@/types";
 
@@ -23,6 +24,7 @@ export default function PaintCard({
           active ? "border-forest bg-forest" : "border-ink-faint bg-white"
         }`}
       />
+      <PaintThumb src={paint.imageUrl} alt={paint.name} size={32} />
       <span className="flex-1">
         <span className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-bold text-ink">{paint.name}</span>
