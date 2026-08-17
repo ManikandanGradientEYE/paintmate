@@ -58,10 +58,12 @@ export default async function Home() {
             <CalculatorSection />
             <PaintSection />
             <ShadeSection />
-            <LocationSection />
           </div>
-          <div className="hidden lg:sticky lg:top-28 lg:block">
-            <EstimateCard />
+          <div className="flex flex-col gap-6 lg:sticky lg:top-28">
+            <div className="hidden lg:block">
+              <EstimateCard />
+            </div>
+            <LocationSection />
           </div>
         </div>
         <MoreProducts products={siteData.catalogProducts} />
