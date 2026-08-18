@@ -1,4 +1,5 @@
 import PaintThumb from "@/components/ui/PaintThumb";
+import { useQuote } from "@/context/QuoteContext";
 import { formatINR } from "@/lib/format";
 import { Paint } from "@/types";
 
@@ -11,6 +12,9 @@ export default function PaintCard({
   active: boolean;
   onSelect: () => void;
 }) {
+  const { t } = useQuote();
+  const tierLabel = paint.tier === "Premium" ? t.tierPremium : t.tierValue;
+
   return (
     <button
       type="button"
@@ -30,13 +34,13 @@ export default function PaintCard({
           <span className="text-sm font-bold text-ink">{paint.name}</span>
           {paint.recommended && (
             <span className="rounded-full bg-olive px-2.5 py-0.5 text-[11px] font-bold text-white">
-              Recommended
+              {t.paintRecommended}
             </span>
           )}
         </span>
         <span className="mt-0.5 block text-xs text-ink-muted">
           {paint.brand} · {paint.approxPrice ? "~" : ""}
-          {formatINR(paint.pricePerLitre)}/L · {paint.tier}
+          {formatINR(paint.pricePerLitre)}/L · {tierLabel}
         </span>
       </span>
     </button>

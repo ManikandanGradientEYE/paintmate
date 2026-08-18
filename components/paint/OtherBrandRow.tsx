@@ -1,4 +1,5 @@
 import PaintThumb from "@/components/ui/PaintThumb";
+import { useQuote } from "@/context/QuoteContext";
 import { formatINR } from "@/lib/format";
 import { Paint } from "@/types";
 
@@ -11,6 +12,9 @@ export default function OtherBrandRow({
   active: boolean;
   onSelect: () => void;
 }) {
+  const { t } = useQuote();
+  const tierLabel = paint.tier === "Premium" ? t.tierPremium : t.tierValue;
+
   return (
     <button
       type="button"
@@ -26,7 +30,7 @@ export default function OtherBrandRow({
       <span className="flex-1">
         <span className="block text-sm font-bold text-ink">{paint.name}</span>
         <span className="mt-0.5 block text-xs text-ink-muted">
-          {paint.brand} · ~{formatINR(paint.pricePerLitre)}/L · {paint.tier}
+          {paint.brand} · ~{formatINR(paint.pricePerLitre)}/L · {tierLabel}
         </span>
       </span>
     </button>

@@ -6,7 +6,7 @@ import { formatINR } from "@/lib/format";
 import EstimateCard from "./EstimateCard";
 
 export default function StickyBar() {
-  const { estimate } = useQuote();
+  const { estimate, t } = useQuote();
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -14,7 +14,7 @@ export default function StickyBar() {
       {expanded && (
         <button
           type="button"
-          aria-label="Close estimate breakdown"
+          aria-label={t.stickyHideBreakdown}
           onClick={() => setExpanded(false)}
           className="fixed inset-0 z-30 bg-ink/30"
         />
@@ -33,12 +33,12 @@ export default function StickyBar() {
             type="button"
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
-            aria-label={expanded ? "Hide estimate breakdown" : "View estimate breakdown"}
+            aria-label={expanded ? t.stickyHideBreakdown : t.stickyViewBreakdown}
             className="flex items-center gap-2"
           >
             <div className="text-left">
               <p className="text-[11px] font-bold tracking-wider text-ink-faint">
-                ESTIMATED TOTAL
+                {t.stickyEstimatedTotal}
               </p>
               <p className="text-lg font-extrabold text-forest">
                 {formatINR(estimate.total)}
@@ -57,7 +57,7 @@ export default function StickyBar() {
             onClick={() => setExpanded(false)}
             className="rounded-full bg-brand-pink px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:brightness-105"
           >
-            Get quote on WhatsApp
+            {t.stickyGetQuote}
           </a>
         </div>
       </div>

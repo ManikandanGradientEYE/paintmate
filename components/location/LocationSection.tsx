@@ -5,7 +5,7 @@ import Card from "@/components/ui/Card";
 import { useQuote } from "@/context/QuoteContext";
 
 export default function LocationSection() {
-  const { state, dispatch, isInLudhiana, submitLead } = useQuote();
+  const { state, dispatch, isInLudhiana, submitLead, t } = useQuote();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle"
   );
@@ -17,10 +17,10 @@ export default function LocationSection() {
 
     const nextErrors: { name?: string; phone?: string } = {};
     if (state.contact.name.trim().length < 2) {
-      nextErrors.name = "Enter your full name";
+      nextErrors.name = t.locationNameError;
     }
     if (!/^[0-9+()\-\s]{7,20}$/.test(state.contact.phone.trim())) {
-      nextErrors.phone = "Enter a valid contact number";
+      nextErrors.phone = t.locationPhoneError;
     }
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -39,10 +39,11 @@ export default function LocationSection() {
   if (status === "success") {
     return (
       <Card id="contact">
-        <p className="text-base font-bold text-forest">Thanks, {state.contact.name}!</p>
+        <p className="text-base font-bold text-forest">
+          {t.locationThanksName(state.contact.name)}
+        </p>
         <p className="mt-1 text-sm text-ink-muted">
-          Our team will reach out on {state.contact.phone} shortly to confirm your
-          quote and shade.
+          {t.locationWillReachOut(state.contact.phone)}
         </p>
       </Card>
     );
@@ -59,7 +60,7 @@ export default function LocationSection() {
               onChange={(e) =>
                 dispatch({ type: "SET_CONTACT", field: "name", value: e.target.value })
               }
-              placeholder="Your name"
+              placeholder={t.locationNamePlaceholder}
               className="w-full rounded-xl border border-line px-4 py-3 text-sm text-ink outline-none focus:border-forest"
             />
             {errors.name && <p className="mt-1 text-xs text-brand-pink">{errors.name}</p>}
@@ -71,7 +72,7 @@ export default function LocationSection() {
               onChange={(e) =>
                 dispatch({ type: "SET_CONTACT", field: "phone", value: e.target.value })
               }
-              placeholder="Contact number"
+              placeholder={t.locationPhonePlaceholder}
               className="w-full rounded-xl border border-line px-4 py-3 text-sm text-ink outline-none focus:border-forest"
             />
             {errors.phone && (
@@ -84,13 +85,11 @@ export default function LocationSection() {
           type="text"
           value={state.locality}
           onChange={(e) => dispatch({ type: "SET_LOCALITY", value: e.target.value })}
-          placeholder="Enter area/locality in Ludhiana..."
+          placeholder={t.locationLocalityPlaceholder}
           className="mt-3 w-full rounded-xl border border-line px-4 py-3 text-sm text-ink outline-none focus:border-forest"
         />
         {!isInLudhiana && (
-          <p className="mt-1.5 text-xs text-ink-faint">
-            Outside Ludhiana? Delivery charge confirmed on WhatsApp.
-          </p>
+          <p className="mt-1.5 text-xs text-ink-faint">{t.locationOutsideLudhiana}</p>
         )}
 
         {status === "error" && serverError && (
@@ -102,15 +101,14 @@ export default function LocationSection() {
           disabled={status === "submitting"}
           className="mt-4 w-full rounded-full bg-brand-pink py-3.5 text-sm font-bold text-white shadow-sm transition hover:brightness-105 disabled:opacity-60"
         >
-          {status === "submitting" ? "Sending..." : "Get quote on WhatsApp"}
+          {status === "submitting" ? t.locationSending : t.locationGetQuoteButton}
         </button>
 
         <p className="mt-2 text-center text-xs text-ink-faint">
-          Rough estimate only. Final quote confirmed on WhatsApp.
+          {t.locationRoughEstimate}
         </p>
         <p className="mt-1 text-center text-xs font-bold text-ink">
-          First order: 5% off. Second order: 10% off. Discount confirmed on final
-          WhatsApp quote.
+          {t.estimateDiscountNote}
         </p>
       </form>
     </Card>

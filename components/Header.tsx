@@ -9,7 +9,7 @@ const LANGUAGES: { id: "en" | "hi" | "pa"; label: string }[] = [
 ];
 
 export default function Header() {
-  const { state, dispatch } = useQuote();
+  const { state, dispatch, t } = useQuote();
 
   return (
     <header className="sticky top-0 z-30 bg-cream">
@@ -24,7 +24,7 @@ export default function Header() {
         <div>
           <p className="text-xl font-extrabold leading-none text-forest">Paint Mate</p>
           <p className="mt-1 text-[11px] font-semibold tracking-wide text-ink-faint">
-            A JIWAN GROUP VENTURE
+            {t.headerTagline.toUpperCase()}
           </p>
         </div>
 
@@ -54,13 +54,13 @@ export default function Header() {
           href="#contact"
           className="rounded-full bg-forest px-5 py-2.5 text-sm font-semibold text-white"
         >
-          Get a quote
+          {t.headerGetQuote}
         </a>
         <a
           href="#jiwan-story"
           className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink-muted"
         >
-          About Jiwan
+          {t.headerAboutJiwan}
         </a>
       </div>
     </header>

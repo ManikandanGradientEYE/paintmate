@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useMemo, useReducer } from "react";
 import { calculateEstimate } from "@/lib/pricing";
 import { isLudhianaLocality } from "@/lib/format";
+import { Dictionary, dictionaries, Language } from "@/lib/i18n";
 import {
   AddOnDef,
   Coats,
@@ -15,8 +16,6 @@ import {
   SiteData,
   Surface,
 } from "@/types";
-
-type Language = "en" | "hi" | "pa";
 
 interface ContactInfo {
   name: string;
@@ -136,6 +135,7 @@ interface QuoteContextValue {
   shades: Shade[];
   addOns: AddOnDef[];
   pricingSettings: PricingSettings;
+  t: Dictionary;
   submitLead: () => Promise<{ ok: true; leadId: string } | { ok: false; error: string }>;
 }
 
@@ -237,6 +237,7 @@ export function QuoteProvider({
       shades: siteData.shades,
       addOns: siteData.addOns,
       pricingSettings: siteData.pricingSettings,
+      t: dictionaries[state.language],
       submitLead,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

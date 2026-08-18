@@ -9,11 +9,15 @@ const MIN_AREA_SQFT = 200;
 const MAX_AREA_SQFT = 8000;
 
 export default function CalculatorSection() {
-  const { state, dispatch, homeSizes } = useQuote();
+  const { state, dispatch, homeSizes, t } = useQuote();
+  const surfaceLabels: Record<Surface, string> = {
+    interior: t.calcInterior,
+    exterior: t.calcExterior,
+  };
 
   return (
     <Card>
-      <h2 className="text-base font-bold text-ink">What size is your home?</h2>
+      <h2 className="text-base font-bold text-ink">{t.calcHeading}</h2>
       <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         {homeSizes.map((size) => {
           const active = state.homeSizeId === size.id;
@@ -35,7 +39,7 @@ export default function CalculatorSection() {
         })}
       </div>
 
-      <h3 className="mt-6 text-sm font-bold text-ink">Or set the exact wall area</h3>
+      <h3 className="mt-6 text-sm font-bold text-ink">{t.calcOrSetArea}</h3>
       <div className="mt-3 flex items-center gap-4">
         <input
           type="range"
@@ -67,7 +71,7 @@ export default function CalculatorSection() {
 
       <div className="mt-6 flex flex-wrap items-start justify-between gap-6">
         <div>
-          <h3 className="text-sm font-bold text-ink">Surface</h3>
+          <h3 className="text-sm font-bold text-ink">{t.calcSurface}</h3>
           <div className="mt-3 flex gap-2">
             {(["interior", "exterior"] as Surface[]).map((surface) => {
               const active = state.surface === surface;
@@ -76,11 +80,11 @@ export default function CalculatorSection() {
                   key={surface}
                   type="button"
                   onClick={() => dispatch({ type: "SET_SURFACE", surface })}
-                  className={`rounded-full px-5 py-2 text-sm font-semibold capitalize transition ${
+                  className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
                     active ? "bg-forest text-white" : "bg-tan text-ink"
                   }`}
                 >
-                  {surface}
+                  {surfaceLabels[surface]}
                 </button>
               );
             })}
@@ -88,7 +92,7 @@ export default function CalculatorSection() {
         </div>
 
         <div>
-          <h3 className="text-sm font-bold text-ink">Coats</h3>
+          <h3 className="text-sm font-bold text-ink">{t.calcCoats}</h3>
           <div className="mt-3 flex gap-2">
             {COATS.map((coats) => {
               const active = state.coats === coats;

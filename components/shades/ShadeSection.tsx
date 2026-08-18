@@ -5,22 +5,27 @@ import { useQuote } from "@/context/QuoteContext";
 import { readableTextColor } from "@/lib/color";
 import { ShadeCategory } from "@/types";
 
-const CATEGORIES: { id: ShadeCategory; label: string; dot: string }[] = [
-  { id: "greens", label: "Greens", dot: "#8FA23A" },
-  { id: "browns", label: "Browns", dot: "#8F7359" },
-  { id: "greys", label: "Greys", dot: "#7C8288" },
-];
+const CATEGORY_DOTS: Record<ShadeCategory, string> = {
+  greens: "#8FA23A",
+  browns: "#8F7359",
+  greys: "#7C8288",
+};
 
 export default function ShadeSection() {
-  const { state, dispatch, shades: allShades } = useQuote();
+  const { state, dispatch, shades: allShades, t } = useQuote();
   const shades = allShades.filter((s) => s.category === state.shadeCategory);
+  const categories: { id: ShadeCategory; label: string; dot: string }[] = [
+    { id: "greens", label: t.shadeGreens, dot: CATEGORY_DOTS.greens },
+    { id: "browns", label: t.shadeBrowns, dot: CATEGORY_DOTS.browns },
+    { id: "greys", label: t.shadeGreys, dot: CATEGORY_DOTS.greys },
+  ];
 
   return (
     <Card>
-      <h2 className="text-base font-bold text-ink">Pick a shade</h2>
+      <h2 className="text-base font-bold text-ink">{t.shadeHeading}</h2>
 
       <div className="mt-3 flex flex-wrap gap-2">
-        {CATEGORIES.map((cat) => {
+        {categories.map((cat) => {
           const active = state.shadeCategory === cat.id;
           return (
             <button
@@ -66,13 +71,12 @@ export default function ShadeSection() {
       </div>
 
       <p className="mt-3 text-xs text-ink-faint">
-        {allShades.length} shades · Custom shade matching usually ready in approx. 2
-        days.
+        {t.shadeCountLabel(allShades.length)} · {t.shadeCustomMatching}
       </p>
 
       <div className="mt-3 border-t border-line pt-3">
         <button type="button" className="text-sm font-semibold text-brand-pink">
-          + Have a shade from another shade card?
+          {t.shadeHaveAnotherCard}
         </button>
       </div>
     </Card>
