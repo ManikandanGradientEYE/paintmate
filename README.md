@@ -125,6 +125,9 @@ click-to-call and click-to-WhatsApp links, a status dropdown (new → contacted 
 - `components/` — one folder per page section on the storefront; `components/admin/`
   for the editor UIs.
 
+## Figma addition
+   https://www.figma.com/design/Q1qMIAeLAaBdrcdwOKgSIe/Paint-Mate?node-id=0-1&p=f&t=0pKNg6drqYvF8r4n-0
+
 ## Known placeholders
 
 - "Get quote on WhatsApp" saves the lead to the database but doesn't yet open an actual
