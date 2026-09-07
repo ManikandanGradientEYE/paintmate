@@ -10,6 +10,7 @@ const LINKS = [
   { href: "/admin/home-sizes", label: "Home sizes" },
   { href: "/admin/add-ons", label: "Add-ons" },
   { href: "/admin/catalog", label: "Catalog" },
+  { href: "/admin/colour", label: "Colour" },
   { href: "/admin/pricing", label: "Pricing" },
 ];
 

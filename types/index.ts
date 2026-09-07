@@ -140,3 +140,17 @@ export interface LeadSubmission {
   shadeCode: string | null;
   customShade: { brand: string; code: string; note: string };
 }
+
+export interface ColourPreview {
+  id: string;
+  hex: string;
+  imageUrl: string;
+  sortOrder: number;
+}
+
+export interface ColourRoom {
+  id: string;
+  name: string;
+  sortOrder: number;
+  previews: ColourPreview[];
+}

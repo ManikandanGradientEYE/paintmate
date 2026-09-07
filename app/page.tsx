@@ -1,3 +1,5 @@
+import { prisma } from "@/lib/prisma";
+import { toColourRoom } from "@/lib/mappers";
 import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import HomeHero from "@/components/home/HomeHero";
@@ -9,7 +11,14 @@ import ColourExperience from "@/components/home/ColourExperience";
 import Journey from "@/components/home/Journey";
 import Reviews from "@/components/home/Reviews";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const roomRows = await prisma.colourRoom.findMany({
+    orderBy: { sortOrder: "asc" },
+    include: { previews: true },
+  });
+
   return (
     <>
       <SiteHeader />
@@ -19,7 +28,7 @@ export default function HomePage() {
         <AboutSection />
         <WhyUs />
         <OurWork />
-        <ColourExperience />
+        <ColourExperience rooms={roomRows.map(toColourRoom)} />
         <Journey />
         <Reviews />
       </main>

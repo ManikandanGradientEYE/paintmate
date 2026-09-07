@@ -103,3 +103,21 @@ model Lead {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
+
+/// A room tab in the "Get the experience of colour" section on the home page.
+model ColourRoom {
+  id        String          @id @default(cuid())
+  name      String
+  sortOrder Int             @default(0)
+  previews  ColourPreview[]
+}
+
+/// One colour swatch for a room, with the photo of that room in that shade.
+model ColourPreview {
+  id        String     @id @default(cuid())
+  roomId    String
+  room      ColourRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  hex       String
+  imageUrl  String
+  sortOrder Int        @default(0)
+}

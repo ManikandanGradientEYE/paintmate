@@ -1,6 +1,8 @@
 import type {
   AddOn as AddOnRow,
   CatalogProduct as CatalogProductRow,
+  ColourPreview as ColourPreviewRow,
+  ColourRoom as ColourRoomRow,
   HomeSize as HomeSizeRow,
   Lead as LeadRow,
   Paint as PaintRow,
@@ -11,6 +13,7 @@ import {
   AddOnDef,
   AddOnSlug,
   CatalogProduct,
+  ColourRoom,
   HomeSize,
   Lead,
   LeadStatus,
@@ -129,5 +132,24 @@ export function toLead(row: LeadRow): Lead {
     notes: row.notes,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
+  };
+}
+
+export function toColourRoom(
+  row: ColourRoomRow & { previews: ColourPreviewRow[] }
+): ColourRoom {
+  return {
+    id: row.id,
+    name: row.name,
+    sortOrder: row.sortOrder,
+    previews: row.previews
+      .slice()
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map((p) => ({
+        id: p.id,
+        hex: p.hex,
+        imageUrl: p.imageUrl,
+        sortOrder: p.sortOrder,
+      })),
   };
 }

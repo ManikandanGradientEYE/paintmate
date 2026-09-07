@@ -175,7 +175,8 @@ want headings to keep the Anton look in all three languages.
   longer renders on the storefront. The data and its `/admin/catalog` editor are still
   in place, so it can be brought back whenever the design calls for it.
 - Home page imagery and copy (our work, reviews, stats) are static from the handoff —
-  not yet admin-editable.
+  not yet admin-editable. The colour-experience section is the exception: its rooms,
+  swatches and per-swatch preview images are managed at /admin/colour.
 - "Still confused! Check out a preview of your shade" and "View Gallery" are styled from
   the design but have no destination yet.
 - Shade grid ships a representative sample per category, not a full 229-shade catalog
