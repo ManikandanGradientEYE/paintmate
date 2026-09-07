@@ -1,51 +1,55 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./app/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-  ],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        cream: {
-          DEFAULT: "#FBF3E6",
-          card: "#FFFFFF",
-        },
+        // Paint Mate design system (from the Figma / UI_UX_changes handoff)
+        cream: "#FFFBF1",
+        header: "#FFFDF9",
         forest: {
-          DEFAULT: "#1F3D24",
-          dark: "#16301B",
-          light: "#2C4F32",
+          DEFAULT: "#28462E",
+          dark: "#1E3524",
         },
-        olive: {
-          DEFAULT: "#8FA23A",
-          light: "#EAF0D9",
+        lime: {
+          DEFAULT: "#B3C341",
+          brush: "#B5BF4C",
         },
-        brand: {
-          pink: "#E01267",
+        pale: {
+          DEFAULT: "#E9EAC0",
+          2: "#E8ECC5",
         },
-        tan: {
-          DEFAULT: "#EFE2CC",
-          dark: "#E4D3B4",
-        },
-        sky: {
-          DEFAULT: "#CDE7F0",
-        },
-        rose: {
-          DEFAULT: "#F7CFDD",
-        },
+        mint: "#E2EDE9",
+        sand: "#F0E4D0",
+        sky: "#9DCCD6",
         ink: {
-          DEFAULT: "#2A2A26",
-          muted: "#6B6B62",
-          faint: "#9A9A8F",
+          DEFAULT: "#000000",
+          muted: "#6E6E6E",
+          faint: "#8A8A8A",
         },
-        line: "#E7DFD0",
+        line: "#DCDCD2",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Oswald", "Arial Narrow", "sans-serif"],
+        sans: ["var(--font-body)", "Plus Jakarta Sans", "Segoe UI", "sans-serif"],
       },
       borderRadius: {
-        xl2: "1.25rem",
+        card: "18px",
+        pill: "999px",
+      },
+      maxWidth: {
+        frame: "1440px",
+        content: "1240px",
+      },
+      boxShadow: {
+        card: "0 4px 16px rgba(40,70,46,.06)",
+      },
+      keyframes: {
+        slide: { to: { transform: "translateX(-50%)" } },
+      },
+      animation: {
+        marquee: "slide 18s linear infinite",
       },
     },
   },
