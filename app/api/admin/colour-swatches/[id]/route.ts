@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { colourPreviewUpdateSchema } from "@/lib/validation";
+import { colourSwatchUpdateSchema } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
 
@@ -9,14 +9,14 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   const body = await request.json().catch(() => null);
-  const parsed = colourPreviewUpdateSchema.safeParse(body);
+  const parsed = colourSwatchUpdateSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { error: "Invalid colour", issues: parsed.error.flatten() },
       { status: 400 }
     );
   }
-  const row = await prisma.colourPreview.update({
+  const row = await prisma.colourSwatch.update({
     where: { id: params.id },
     data: parsed.data,
   });
@@ -27,6 +27,6 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  await prisma.colourPreview.delete({ where: { id: params.id } });
+  await prisma.colourSwatch.delete({ where: { id: params.id } });
   return NextResponse.json({ ok: true });
 }

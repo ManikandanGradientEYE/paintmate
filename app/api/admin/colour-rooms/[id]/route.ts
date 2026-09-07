@@ -20,7 +20,7 @@ export async function PATCH(
   const row = await prisma.colourRoom.update({
     where: { id: params.id },
     data: parsed.data,
-    include: { previews: true },
+    include: { swatches: true },
   });
   return NextResponse.json(toColourRoom(row));
 }

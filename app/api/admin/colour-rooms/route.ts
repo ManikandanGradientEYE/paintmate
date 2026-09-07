@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const rows = await prisma.colourRoom.findMany({
     orderBy: { sortOrder: "asc" },
-    include: { previews: true },
+    include: { swatches: true },
   });
   return NextResponse.json(rows.map(toColourRoom));
 }
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   }
   const row = await prisma.colourRoom.create({
     data: parsed.data,
-    include: { previews: true },
+    include: { swatches: true },
   });
   return NextResponse.json(toColourRoom(row), { status: 201 });
 }

@@ -2,8 +2,9 @@
 // Live data is edited from /admin/colour after that.
 //
 // Rooms and swatches come from the Figma "Get the experience of colour" section.
-// Every swatch starts on the one room photo shipped with the handoff; staff replace
-// each one with a photo of that room actually painted in that shade.
+// Each room needs ONE transparent-background PNG (wall cut out); the selected swatch
+// colour is painted behind it. Seeded with the opaque handoff photo as a placeholder
+// until real transparent PNGs are uploaded from /admin/colour.
 export const colourRooms = [
   {
     name: "Living Room",

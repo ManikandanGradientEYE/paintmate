@@ -15,7 +15,7 @@ async function main() {
   await prisma.shade.deleteMany();
   await prisma.addOn.deleteMany();
   await prisma.catalogProduct.deleteMany();
-  await prisma.colourPreview.deleteMany();
+  await prisma.colourSwatch.deleteMany();
   await prisma.colourRoom.deleteMany();
 
   await prisma.homeSize.createMany({
@@ -79,13 +79,10 @@ async function main() {
     await prisma.colourRoom.create({
       data: {
         name: room.name,
+        imageUrl: DEFAULT_ROOM_IMAGE,
         sortOrder: roomIndex,
-        previews: {
-          create: room.swatches.map((hex, i) => ({
-            hex,
-            imageUrl: DEFAULT_ROOM_IMAGE,
-            sortOrder: i,
-          })),
+        swatches: {
+          create: room.swatches.map((hex, i) => ({ hex, sortOrder: i })),
         },
       },
     });

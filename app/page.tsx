@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const roomRows = await prisma.colourRoom.findMany({
     orderBy: { sortOrder: "asc" },
-    include: { previews: true },
+    include: { swatches: true },
   });
 
   return (

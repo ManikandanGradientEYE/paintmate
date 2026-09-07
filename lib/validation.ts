@@ -93,16 +93,16 @@ export const leadUpdateSchema = z.object({
 
 export const colourRoomSchema = z.object({
   name: z.string().trim().min(1).max(60),
-  sortOrder: z.number().int().optional().default(0),
-});
-
-export const colourPreviewSchema = z.object({
-  roomId: z.string().min(1),
-  hex: z.string().trim().regex(/^#[0-9A-Fa-f]{6}$/, "Use a hex colour like #FF7D7D"),
   imageUrl: z.string().trim().min(1).max(1000),
   sortOrder: z.number().int().optional().default(0),
 });
 
-export const colourPreviewUpdateSchema = colourPreviewSchema.partial().omit({
+export const colourSwatchSchema = z.object({
+  roomId: z.string().min(1),
+  hex: z.string().trim().regex(/^#[0-9A-Fa-f]{6}$/, "Use a hex colour like #FF7D7D"),
+  sortOrder: z.number().int().optional().default(0),
+});
+
+export const colourSwatchUpdateSchema = colourSwatchSchema.partial().omit({
   roomId: true,
 });

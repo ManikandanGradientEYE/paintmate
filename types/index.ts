@@ -141,16 +141,17 @@ export interface LeadSubmission {
   customShade: { brand: string; code: string; note: string };
 }
 
-export interface ColourPreview {
+export interface ColourSwatch {
   id: string;
   hex: string;
-  imageUrl: string;
   sortOrder: number;
 }
 
 export interface ColourRoom {
   id: string;
   name: string;
+  /** transparent-background PNG of the room; the swatch colour shows through it */
+  imageUrl: string;
   sortOrder: number;
-  previews: ColourPreview[];
+  swatches: ColourSwatch[];
 }

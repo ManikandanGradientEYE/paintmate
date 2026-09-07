@@ -105,19 +105,21 @@ model Lead {
 }
 
 /// A room tab in the "Get the experience of colour" section on the home page.
+/// imageUrl is a transparent-background PNG of the room; the selected swatch colour
+/// is painted behind it, so the wall shows through in that shade.
 model ColourRoom {
-  id        String          @id @default(cuid())
+  id        String         @id @default(cuid())
   name      String
-  sortOrder Int             @default(0)
-  previews  ColourPreview[]
+  imageUrl  String
+  sortOrder Int            @default(0)
+  swatches  ColourSwatch[]
 }
 
-/// One colour swatch for a room, with the photo of that room in that shade.
-model ColourPreview {
+/// One selectable colour for a room. No image of its own — it tints the room PNG.
+model ColourSwatch {
   id        String     @id @default(cuid())
   roomId    String
   room      ColourRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   hex       String
-  imageUrl  String
   sortOrder Int        @default(0)
 }
