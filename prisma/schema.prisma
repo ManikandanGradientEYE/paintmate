@@ -90,7 +90,11 @@ model Lead {
   addOnPutty         Boolean
   addOnPrimer        Boolean
   addOnPainter       Boolean
+  addOnPainterCount  Int      @default(0)
   shadeCode          String?
+  customShadeBrand   String?
+  customShadeCode    String?
+  customShadeNote    String?
   estimateTotal      Float
   estimateRangeLow   Float
   estimateRangeHigh  Float

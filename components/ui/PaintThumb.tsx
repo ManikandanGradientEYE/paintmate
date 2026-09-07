@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+/** Small paint thumbnail with a bucket-icon fallback. Used in the admin editor. */
 export default function PaintThumb({
   src,
   alt,
@@ -17,20 +18,13 @@ export default function PaintThumb({
   if (!src || broken) {
     return (
       <span
-        style={style}
-        className="flex shrink-0 items-center justify-center rounded-lg bg-tan text-ink-faint"
+        style={{
+          ...style,
+          background: "#fff url(/assets/bucket.png) center/60% auto no-repeat",
+        }}
+        className="shrink-0 rounded-lg border border-line"
         aria-hidden="true"
-      >
-        <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 24 24" fill="none">
-          <path
-            d="M4 20c0-3 2-4 2-7a6 6 0 1 1 12 0c0 3 2 4 2 7"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          />
-          <circle cx="12" cy="12" r="2.5" fill="currentColor" />
-        </svg>
-      </span>
+      />
     );
   }
 
@@ -41,7 +35,7 @@ export default function PaintThumb({
       alt={alt}
       style={style}
       onError={() => setBroken(true)}
-      className="shrink-0 rounded-lg object-cover"
+      className="shrink-0 rounded-lg border border-line object-cover"
     />
   );
 }

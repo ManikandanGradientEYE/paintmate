@@ -15,9 +15,16 @@ export const leadSubmissionSchema = z.object({
   addOns: z.object({
     putty: z.boolean(),
     primer: z.boolean(),
-    painter: z.boolean(),
+    painterCount: z.number().int().min(0).max(50),
   }),
   shadeCode: z.string().max(20).nullable().optional(),
+  customShade: z
+    .object({
+      brand: z.string().trim().max(120),
+      code: z.string().trim().max(120),
+      note: z.string().trim().max(500),
+    })
+    .optional(),
 });
 
 export type LeadSubmissionInput = z.infer<typeof leadSubmissionSchema>;

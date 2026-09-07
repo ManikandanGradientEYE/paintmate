@@ -1,8 +1,8 @@
 # Paint Mate — quotation calculator + admin
 
-Next.js + TypeScript + Tailwind + Prisma/PostgreSQL build of the Paint Mate quote page
-(Jiwan Group Venture), backed by a database and a staff admin panel at `/admin`.
-Hosted on **Vercel** with a **Neon** Postgres database.
+Next.js + TypeScript + Tailwind + Prisma/PostgreSQL build of Paint Mate (a Jiwan Group
+Venture): a marketing home page at `/`, the Paint Shop estimator at `/shop`, and a staff
+admin panel at `/admin`. Hosted on **Vercel** with a **Neon** Postgres database.
 
 ## Run locally
 
@@ -128,13 +128,56 @@ click-to-call and click-to-WhatsApp links, a status dropdown (new → contacted 
 ## Figma addition
    https://www.figma.com/design/Q1qMIAeLAaBdrcdwOKgSIe/Paint-Mate?node-id=0-1&p=f&t=0pKNg6drqYvF8r4n-0
 
+## Design system
+
+The UI follows the Figma handoff in `UI_UX_changes/` (both `paint-mate-desktop-html` and
+`paint-mate-mobile-html` — the desktop file is the responsive superset and is the one to
+diff against). Tokens live in `tailwind.config.ts` and `app/globals.css`:
+
+| Token | Value |
+|---|---|
+| Cream (page) | `#FFFBF1` |
+| Dark green | `#28462E` |
+| Lime | `#B3C341` |
+| Pale lime | `#E9EAC0` |
+| Mint | `#E2EDE9` |
+| Sand | `#F0E4D0` |
+
+Headings use **Anton**, body text uses **Figtree** (both SIL OFL, self-hosted from
+`public/fonts`). Photography and paint textures live in `public/assets`, copied from the
+handoff. Shared classes — `.display`, `.quote-brush`, `.pm-card`, `.hscroll`, `.blob`,
+`.pad-x` — are defined in `app/globals.css`.
+
+Anton and Figtree are Latin-only, so Hindi and Punjabi text falls back to the system
+Devanagari/Gurmukhi face. That is expected; swap in a matching Indic display font if you
+want headings to keep the Anton look in all three languages.
+
+## Pages
+
+- `/` — marketing home: hero, drag-to-compare before/after slider, about + stat chips,
+  marquee, why us, our work gallery, colour experience, 4-step journey, reviews.
+- `/shop` — the estimator: home size, surface/coats, paint picker, add-ons (including a
+  painter counter), shades with an "another brand" request form, and the estimate.
+  Desktop keeps the estimate + delivery form in a sticky right column; mobile uses the
+  sticky bottom bar with a "Know Details" sheet.
+- `/admin` — staff panel, English only, unchanged by the redesign.
+
 ## Known placeholders
 
 - "Get quote on WhatsApp" saves the lead to the database but doesn't yet open an actual
   `wa.me` chat — no business WhatsApp number was provided. Wiring it up is a small
   addition once you have one (build the link from the lead's phone + a prefilled
   message in `LocationSection.tsx`).
-- Language switcher (English/Hindi/Punjabi) toggles state but content isn't translated.
+- Language selection (English/Hindi/Punjabi) resets on a full page reload — it is React
+  state, not a cookie. Admin-entered content (paint names, shade codes, catalog copy)
+  intentionally stays as typed in every language.
+- The old "More from Jiwan Paints" product grid is not part of the new design, so it no
+  longer renders on the storefront. The data and its `/admin/catalog` editor are still
+  in place, so it can be brought back whenever the design calls for it.
+- Home page imagery and copy (our work, reviews, stats) are static from the handoff —
+  not yet admin-editable.
+- "Still confused! Check out a preview of your shade" and "View Gallery" are styled from
+  the design but have no destination yet.
 - Shade grid ships a representative sample per category, not a full 229-shade catalog
   (add more via `/admin/shades`).
 - Admin auth is a single shared password for all staff, by design (see conversation) —

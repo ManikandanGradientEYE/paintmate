@@ -113,7 +113,11 @@ export interface Lead {
   addOnPutty: boolean;
   addOnPrimer: boolean;
   addOnPainter: boolean;
+  addOnPainterCount: number;
   shadeCode: string | null;
+  customShadeBrand: string | null;
+  customShadeCode: string | null;
+  customShadeNote: string | null;
   estimateTotal: number;
   estimateRangeLow: number;
   estimateRangeHigh: number;
@@ -132,6 +136,7 @@ export interface LeadSubmission {
   surface: Surface;
   coats: Coats;
   paintId: string;
-  addOns: { putty: boolean; primer: boolean; painter: boolean };
+  addOns: { putty: boolean; primer: boolean; painterCount: number };
   shadeCode: string | null;
+  customShade: { brand: string; code: string; note: string };
 }

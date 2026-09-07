@@ -3,7 +3,6 @@
 import React, { createContext, useContext, useMemo, useReducer } from "react";
 import { calculateEstimate } from "@/lib/pricing";
 import { isLudhianaLocality } from "@/lib/format";
-import { Dictionary, dictionaries, Language } from "@/lib/i18n";
 import {
   AddOnDef,
   Coats,
@@ -12,7 +11,6 @@ import {
   Paint,
   PricingSettings,
   Shade,
-  ShadeCategory,
   SiteData,
   Surface,
 } from "@/types";
@@ -22,17 +20,25 @@ interface ContactInfo {
   phone: string;
 }
 
+interface CustomShade {
+  brand: string;
+  code: string;
+  note: string;
+}
+
 interface QuoteState {
   homeSizeId: string | null;
   areaSqft: number;
   surface: Surface;
   coats: Coats;
   selectedPaintId: string;
-  addOns: { putty: boolean; primer: boolean; painter: boolean };
-  shadeCategory: ShadeCategory;
+  addOns: { putty: boolean; primer: boolean };
+  painterCount: number;
+  /** null = the "ALL" tab */
+  shadeCategory: string | null;
   selectedShadeCode: string | null;
+  customShade: CustomShade;
   locality: string;
-  language: Language;
   contact: ContactInfo;
 }
 
@@ -42,11 +48,12 @@ type QuoteAction =
   | { type: "SET_SURFACE"; surface: Surface }
   | { type: "SET_COATS"; coats: Coats }
   | { type: "SET_PAINT"; id: string }
-  | { type: "TOGGLE_ADDON"; id: "putty" | "primer" | "painter" }
-  | { type: "SET_SHADE_CATEGORY"; category: ShadeCategory }
+  | { type: "TOGGLE_ADDON"; id: "putty" | "primer" }
+  | { type: "SET_PAINTER_COUNT"; count: number }
+  | { type: "SET_SHADE_CATEGORY"; category: string | null }
   | { type: "SET_SHADE"; code: string }
+  | { type: "SET_CUSTOM_SHADE"; field: keyof CustomShade; value: string }
   | { type: "SET_LOCALITY"; value: string }
-  | { type: "SET_LANGUAGE"; language: Language }
   | { type: "SET_CONTACT"; field: keyof ContactInfo; value: string };
 
 const DEFAULT_AREA_SQFT = 1000;
@@ -64,12 +71,12 @@ function buildInitialState(siteData: SiteData): QuoteState {
     addOns: {
       putty: siteData.addOns.find((a) => a.slug === "putty")?.defaultOn ?? true,
       primer: siteData.addOns.find((a) => a.slug === "primer")?.defaultOn ?? true,
-      painter: siteData.addOns.find((a) => a.slug === "painter")?.defaultOn ?? false,
     },
-    shadeCategory: "greens",
+    painterCount: 0,
+    shadeCategory: null,
     selectedShadeCode: null,
+    customShade: { brand: "", code: "", note: "" },
     locality: "",
-    language: "en",
     contact: { name: "", phone: "" },
   };
 }
@@ -109,14 +116,19 @@ function reducer(state: QuoteState, action: QuoteAction, siteData: SiteData): Qu
         ...state,
         addOns: { ...state.addOns, [action.id]: !state.addOns[action.id] },
       };
+    case "SET_PAINTER_COUNT":
+      return { ...state, painterCount: Math.max(0, Math.min(50, action.count)) };
     case "SET_SHADE_CATEGORY":
-      return { ...state, shadeCategory: action.category, selectedShadeCode: null };
+      return { ...state, shadeCategory: action.category };
     case "SET_SHADE":
       return { ...state, selectedShadeCode: action.code };
+    case "SET_CUSTOM_SHADE":
+      return {
+        ...state,
+        customShade: { ...state.customShade, [action.field]: action.value },
+      };
     case "SET_LOCALITY":
       return { ...state, locality: action.value };
-    case "SET_LANGUAGE":
-      return { ...state, language: action.language };
     case "SET_CONTACT":
       return { ...state, contact: { ...state.contact, [action.field]: action.value } };
     default:
@@ -128,14 +140,16 @@ interface QuoteContextValue {
   state: QuoteState;
   dispatch: React.Dispatch<QuoteAction>;
   selectedPaint: Paint;
+  selectedShade: Shade | null;
   estimate: EstimateBreakdown;
   isInLudhiana: boolean;
   availablePaints: { recommended: Paint[]; other: Paint[] };
   homeSizes: HomeSize[];
   shades: Shade[];
+  visibleShades: Shade[];
+  shadeCategories: string[];
   addOns: AddOnDef[];
   pricingSettings: PricingSettings;
-  t: Dictionary;
   submitLead: () => Promise<{ ok: true; leadId: string } | { ok: false; error: string }>;
 }
 
@@ -193,6 +207,14 @@ export function QuoteProvider({
       (p) => !p.isJiwan && p.surfaces.includes(state.surface)
     );
 
+    // shade tabs come from whatever categories exist in the database
+    const shadeCategories = Array.from(new Set(siteData.shades.map((s) => s.category)));
+    const visibleShades = state.shadeCategory
+      ? siteData.shades.filter((s) => s.category === state.shadeCategory)
+      : siteData.shades;
+    const selectedShade =
+      siteData.shades.find((s) => s.code === state.selectedShadeCode) ?? null;
+
     const homeSizeLabel =
       siteData.homeSizes.find((h) => h.id === state.homeSizeId)?.label ?? null;
 
@@ -212,17 +234,28 @@ export function QuoteProvider({
             surface: state.surface,
             coats: state.coats,
             paintId: selectedPaint.id,
-            addOns: state.addOns,
+            addOns: {
+              putty: state.addOns.putty,
+              primer: state.addOns.primer,
+              painterCount: state.painterCount,
+            },
             shadeCode: state.selectedShadeCode,
+            customShade: state.customShade,
           }),
         });
         const data = await response.json();
         if (!response.ok) {
-          return { ok: false, error: data?.error ?? "Something went wrong. Please try again." };
+          return {
+            ok: false,
+            error: data?.error ?? "Something went wrong. Please try again.",
+          };
         }
         return { ok: true, leadId: data.leadId as string };
       } catch {
-        return { ok: false, error: "Network error. Please check your connection and try again." };
+        return {
+          ok: false,
+          error: "Network error. Please check your connection and try again.",
+        };
       }
     }
 
@@ -230,14 +263,16 @@ export function QuoteProvider({
       state,
       dispatch,
       selectedPaint,
+      selectedShade,
       estimate,
       isInLudhiana,
       availablePaints: { recommended, other },
       homeSizes: siteData.homeSizes,
       shades: siteData.shades,
+      visibleShades,
+      shadeCategories,
       addOns: siteData.addOns,
       pricingSettings: siteData.pricingSettings,
-      t: dictionaries[state.language],
       submitLead,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
