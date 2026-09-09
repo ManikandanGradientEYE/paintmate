@@ -1,10 +1,13 @@
 import type { CSSProperties } from "react";
-import { figmaToCss, type FigmaBox } from "@/lib/figmaBox";
+import type { BlobPlacement } from "@/lib/figmaBox";
 
 /**
- * A decorative image positioned with numbers copied straight from Figma's properties
- * panel. Paste Width / Height / Left / Top / Rotation / Opacity as-is — the rotated
- * bounding-box correction is applied for you (see lib/figmaBox.ts).
+ * A decorative image positioned by plain CSS numbers — the same values devtools shows
+ * on `.pm-blob`, so a blob can be nudged live in the browser and the result pasted
+ * straight back into the caller.
+ *
+ * Coming from Figma instead? Wrap the properties-panel values in `fromFigma()`, which
+ * applies the rotated bounding-box correction (see lib/figmaBox.ts).
  *
  * The parent must be `relative`, and usually `overflow-hidden` so the blob is clipped
  * at the section edge rather than causing a horizontal scrollbar.
@@ -15,15 +18,14 @@ export default function FigmaBlob({
   src = "/assets/blob-cream.png",
   className = "",
 }: {
-  /** values from the 1440px Figma frame — used at >= 1024px */
-  desktop: FigmaBox;
-  /** values from the mobile frame — used below 1024px. Falls back to `desktop`. */
-  mobile?: FigmaBox;
+  /** used at >= 1024px */
+  desktop: BlobPlacement;
+  /** used below 1024px; falls back to `desktop` */
+  mobile?: BlobPlacement;
   src?: string;
   className?: string;
 }) {
-  const d = figmaToCss(desktop);
-  const m = figmaToCss(mobile ?? desktop);
+  const m = mobile ?? desktop;
 
   const style = {
     "--blob-image": `url(${src})`,
@@ -33,12 +35,12 @@ export default function FigmaBlob({
     "--blob-y": `${m.top}px`,
     "--blob-rot": `${m.rotation}deg`,
     "--blob-op": `${m.opacity}`,
-    "--blob-w-lg": `${d.width}px`,
-    "--blob-h-lg": `${d.height}px`,
-    "--blob-x-lg": `${d.left}px`,
-    "--blob-y-lg": `${d.top}px`,
-    "--blob-rot-lg": `${d.rotation}deg`,
-    "--blob-op-lg": `${d.opacity}`,
+    "--blob-w-lg": `${desktop.width}px`,
+    "--blob-h-lg": `${desktop.height}px`,
+    "--blob-x-lg": `${desktop.left}px`,
+    "--blob-y-lg": `${desktop.top}px`,
+    "--blob-rot-lg": `${desktop.rotation}deg`,
+    "--blob-op-lg": `${desktop.opacity}`,
   } as CSSProperties;
 
   return <span aria-hidden="true" className={`pm-blob ${className}`} style={style} />;
