@@ -46,10 +46,11 @@ const HERO_BLOB_DESKTOP: BlobPlacement = {
 const HERO_BLOB_MOBILE: BlobPlacement = {
   width: 190,
   height: 300,
-  left: -56,
-  top: -10,
-  rotation: 0,
+  left: -25,
+  top: -105,
+  rotation: -38.45,
   opacity: 0.85,
+  flipX: true,
 };
 
 export default function HomeHero() {
