@@ -36,10 +36,11 @@ import type { BlobPlacement } from "@/lib/figmaBox";
 const HERO_BLOB_DESKTOP: BlobPlacement = {
   width: 481.25,
   height: 539.32,
-  left: -45.47,
-  top: -208.95,
-  rotation: -41.45,
+  left: -20.47,
+  top: -197.95,
+  rotation: -38.45,
   opacity: 0.5,
+  flipX: true,
 };
 
 const HERO_BLOB_MOBILE: BlobPlacement = {
