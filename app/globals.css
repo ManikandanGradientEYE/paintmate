@@ -151,6 +151,31 @@ body {
     }
   }
 
+  /* Decorative blob placed from Figma numbers — see components/site/FigmaBlob.tsx.
+     Inline styles cannot carry media queries, so the component passes both breakpoints
+     as custom properties and this rule picks the right set. */
+  .pm-blob {
+    position: absolute;
+    pointer-events: none;
+    background: var(--blob-image) center/contain no-repeat;
+    width: var(--blob-w);
+    height: var(--blob-h);
+    left: var(--blob-x);
+    top: var(--blob-y);
+    transform: rotate(var(--blob-rot));
+    opacity: var(--blob-op);
+  }
+  @media (min-width: 1024px) {
+    .pm-blob {
+      width: var(--blob-w-lg);
+      height: var(--blob-h-lg);
+      left: var(--blob-x-lg);
+      top: var(--blob-y-lg);
+      transform: rotate(var(--blob-rot-lg));
+      opacity: var(--blob-op-lg);
+    }
+  }
+
   /* decorative cream blob behind section headings */
   .blob::before {
     content: "";
