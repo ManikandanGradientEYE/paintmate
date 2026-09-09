@@ -34,12 +34,16 @@ export default function FigmaBlob({
     "--blob-x": `${m.left}px`,
     "--blob-y": `${m.top}px`,
     "--blob-rot": `${m.rotation}deg`,
+    "--blob-sx": m.flipX ? "-1" : "1",
+    "--blob-sy": m.flipY ? "-1" : "1",
     "--blob-op": `${m.opacity}`,
     "--blob-w-lg": `${desktop.width}px`,
     "--blob-h-lg": `${desktop.height}px`,
     "--blob-x-lg": `${desktop.left}px`,
     "--blob-y-lg": `${desktop.top}px`,
     "--blob-rot-lg": `${desktop.rotation}deg`,
+    "--blob-sx-lg": desktop.flipX ? "-1" : "1",
+    "--blob-sy-lg": desktop.flipY ? "-1" : "1",
     "--blob-op-lg": `${desktop.opacity}`,
   } as CSSProperties;
 

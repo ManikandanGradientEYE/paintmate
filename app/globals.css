@@ -162,7 +162,7 @@ body {
     height: var(--blob-h);
     left: var(--blob-x);
     top: var(--blob-y);
-    transform: rotate(var(--blob-rot));
+    transform: rotate(var(--blob-rot)) scale(var(--blob-sx, 1), var(--blob-sy, 1));
     opacity: var(--blob-op);
   }
   @media (min-width: 1024px) {
@@ -171,7 +171,7 @@ body {
       height: var(--blob-h-lg);
       left: var(--blob-x-lg);
       top: var(--blob-y-lg);
-      transform: rotate(var(--blob-rot-lg));
+      transform: rotate(var(--blob-rot-lg)) scale(var(--blob-sx-lg, 1), var(--blob-sy-lg, 1));
       opacity: var(--blob-op-lg);
     }
   }

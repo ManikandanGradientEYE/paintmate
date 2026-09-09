@@ -27,6 +27,10 @@ export interface BlobPlacement {
   rotation: number;
   /** 0–1, as CSS opacity */
   opacity: number;
+  /** mirror horizontally (scaleX(-1)) */
+  flipX?: boolean;
+  /** mirror vertically (scaleY(-1)) */
+  flipY?: boolean;
 }
 
 /** Values as they appear in Figma's properties panel. */
@@ -44,7 +48,7 @@ export interface FigmaBox {
 }
 
 /** Converts Figma properties-panel values into CSS placement. */
-export function fromFigma(box: FigmaBox): BlobPlacement {
+export function fromFigma(box: FigmaBox & { flipX?: boolean; flipY?: boolean }): BlobPlacement {
   const { width, height, left, top } = box;
   const rotation = box.rotation ?? 0;
 
@@ -62,5 +66,7 @@ export function fromFigma(box: FigmaBox): BlobPlacement {
     opacity: (box.opacity ?? 100) / 100,
     left: left + (boundingWidth - width) / 2,
     top: top + (boundingHeight - height) / 2,
+    flipX: box.flipX,
+    flipY: box.flipY,
   };
 }
