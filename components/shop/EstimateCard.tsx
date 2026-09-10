@@ -101,7 +101,7 @@ export default function EstimateCard() {
       {estimate.painterCount > 0 && (
         <Line
           label={t.estimatePainter}
-          sub={t.estimatePainterCount(estimate.painterCount)}
+          sub={t.estimatePainterSub(estimate.painterCount, state.areaSqft)}
           value={formatINR(estimate.painterCost)}
         />
       )}

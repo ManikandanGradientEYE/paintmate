@@ -70,8 +70,8 @@ export interface PricingSettings {
   puttyBagKg: number;
   puttyPricePerBag: number;
   puttyCoverageSqftPerKg: number;
-  /** charge for a single painter */
-  painterRate: number;
+  /** painter labour, charged on wall area */
+  painterRatePerSqft: number;
 }
 
 export interface EstimateBreakdown {

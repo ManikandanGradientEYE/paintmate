@@ -15,7 +15,7 @@ export const DEFAULT_PRICING_SETTINGS: PricingSettings = {
   puttyBagKg: 30,
   puttyPricePerBag: 515,
   puttyCoverageSqftPerKg: 1000 / 90,
-  painterRate: 900,
+  painterRatePerSqft: 7,
 };
 
 export function primerPriceFor(settings: PricingSettings, surface: Surface): number {
@@ -68,9 +68,11 @@ export function calculateEstimate({
     : 0;
   const puttyCost = puttyBags * settings.puttyPricePerBag;
 
-  // Painter labour is quoted per head and sits outside the GST line, which covers
-  // paint + primer only.
-  const painterCost = painterCount * settings.painterRate;
+  // Painter labour is quoted on wall area, so the head count decides whether it is
+  // charged, not how much: two painters on the same walls is the same job. It sits
+  // outside the GST line, which covers paint + primer only.
+  const painterCost =
+    painterCount > 0 ? Math.round(areaSqft * settings.painterRatePerSqft) : 0;
 
   const deliveryFee = isInLudhiana ? settings.deliveryFeeLudhiana : null;
 

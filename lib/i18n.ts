@@ -136,7 +136,7 @@ export interface Dictionary {
   estimateWallPutty: string;
   estimateBagsKgLabel: (bags: number, kg: number) => string;
   estimatePainter: string;
-  estimatePainterCount: (count: number) => string;
+  estimatePainterSub: (count: number, areaSqft: number) => string;
   estimateDelivery: string;
   estimateFree: string;
   estimateConfirmedOnWhatsApp: string;
@@ -274,7 +274,8 @@ export const dictionaries: Record<Language, Dictionary> = {
 
     addOnsTitle: "Add ons",
     addPainter: "Add Painter",
-    paintPainterNote: "Painter labour — quote confirmed on WhatsApp based on scope.",
+    paintPainterNote:
+      "Painter labour is charged on wall area, not per painter — final quote confirmed on WhatsApp.",
 
     shadeHeading: "Choose your shades",
     shadeAll: "ALL",
@@ -297,8 +298,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     estimateGstOn: "GST (18%) on paint + primer",
     estimateWallPutty: "Wall putty (incl. GST)",
     estimateBagsKgLabel: (bags, kg) => `${bags} bag${bags > 1 ? "s" : ""} / ${kg} kg`,
-    estimatePainter: "Painter",
-    estimatePainterCount: (count) => `${count} painter${count > 1 ? "s" : ""}`,
+    estimatePainter: "Painter labour",
+    estimatePainterSub: (count, areaSqft) =>
+      `${count} painter${count > 1 ? "s" : ""} · ${areaSqft.toLocaleString("en-IN")} sq ft`,
     estimateDelivery: "Delivery",
     estimateFree: "Free",
     estimateConfirmedOnWhatsApp: "Confirmed on WhatsApp",
@@ -432,7 +434,8 @@ export const dictionaries: Record<Language, Dictionary> = {
 
     addOnsTitle: "ऐड ऑन",
     addPainter: "पेंटर जोड़ें",
-    paintPainterNote: "पेंटर की मज़दूरी — काम के अनुसार कोटेशन WhatsApp पर तय होगा।",
+    paintPainterNote:
+      "पेंटर की मज़दूरी दीवार के क्षेत्रफल पर लगती है, प्रति पेंटर नहीं — अंतिम कोटेशन WhatsApp पर तय होगा।",
 
     shadeHeading: "अपने शेड चुनें",
     shadeAll: "सभी",
@@ -455,8 +458,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     estimateGstOn: "पेंट + प्राइमर पर GST (18%)",
     estimateWallPutty: "वॉल पुट्टी (GST सहित)",
     estimateBagsKgLabel: (bags, kg) => `${bags} बैग / ${kg} किलो`,
-    estimatePainter: "पेंटर",
-    estimatePainterCount: (count) => `${count} पेंटर`,
+    estimatePainter: "पेंटर मज़दूरी",
+    estimatePainterSub: (count, areaSqft) =>
+      `${count} पेंटर · ${areaSqft.toLocaleString("en-IN")} sq ft`,
     estimateDelivery: "डिलीवरी",
     estimateFree: "मुफ़्त",
     estimateConfirmedOnWhatsApp: "WhatsApp पर तय होगा",
@@ -591,7 +595,8 @@ export const dictionaries: Record<Language, Dictionary> = {
 
     addOnsTitle: "ਐਡ ਆਨ",
     addPainter: "ਪੇਂਟਰ ਜੋੜੋ",
-    paintPainterNote: "ਪੇਂਟਰ ਦੀ ਮਜ਼ਦੂਰੀ — ਕੰਮ ਮੁਤਾਬਕ ਕੋਟੇਸ਼ਨ WhatsApp ਉੱਤੇ ਤੈਅ ਹੋਵੇਗਾ।",
+    paintPainterNote:
+      "ਪੇਂਟਰ ਦੀ ਮਜ਼ਦੂਰੀ ਕੰਧ ਦੇ ਖੇਤਰਫਲ ਉੱਤੇ ਲੱਗਦੀ ਹੈ, ਪ੍ਰਤੀ ਪੇਂਟਰ ਨਹੀਂ — ਅੰਤਮ ਕੋਟੇਸ਼ਨ WhatsApp ਉੱਤੇ ਤੈਅ ਹੋਵੇਗਾ।",
 
     shadeHeading: "ਆਪਣੇ ਸ਼ੇਡ ਚੁਣੋ",
     shadeAll: "ਸਾਰੇ",
@@ -614,8 +619,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     estimateGstOn: "ਪੇਂਟ + ਪ੍ਰਾਈਮਰ ਉੱਤੇ GST (18%)",
     estimateWallPutty: "ਵਾਲ ਪੁੱਟੀ (GST ਸਮੇਤ)",
     estimateBagsKgLabel: (bags, kg) => `${bags} ਬੈਗ / ${kg} ਕਿੱਲੋ`,
-    estimatePainter: "ਪੇਂਟਰ",
-    estimatePainterCount: (count) => `${count} ਪੇਂਟਰ`,
+    estimatePainter: "ਪੇਂਟਰ ਮਜ਼ਦੂਰੀ",
+    estimatePainterSub: (count, areaSqft) =>
+      `${count} ਪੇਂਟਰ · ${areaSqft.toLocaleString("en-IN")} sq ft`,
     estimateDelivery: "ਡਿਲੀਵਰੀ",
     estimateFree: "ਮੁਫ਼ਤ",
     estimateConfirmedOnWhatsApp: "WhatsApp ਉੱਤੇ ਤੈਅ ਹੋਵੇਗਾ",
