@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { COLOUR_SECTION_ID } from "@/lib/sections";
 import { useQuote } from "@/context/QuoteContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { readableTextColor } from "@/lib/color";
@@ -138,7 +140,10 @@ export default function ShadesCard() {
           </>
         )}
 
-        <div className="mt-6 flex items-center gap-3.5 rounded-xl border-[1.5px] border-lime bg-pale p-4 lg:gap-5 lg:px-6 lg:py-5">
+        {/* jumps to the colour preview on the home page */}
+        <Link
+          href={`/#${COLOUR_SECTION_ID}`}
+          className="mt-6 flex items-center gap-3.5 rounded-xl border-[1.5px] border-lime bg-pale p-4 text-left transition hover:border-forest hover:bg-lime/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest lg:gap-5 lg:px-6 lg:py-5">
           <svg width="40" height="42" viewBox="0 0 42 42" fill="#B3C341" aria-hidden="true" className="shrink-0">
             <path
               d="M28 3l1.6 5M33.5 5.5l-1 5M37 10.5l-4 2.6"
@@ -152,11 +157,27 @@ export default function ShadesCard() {
             <rect x="4" y="27.4" width="12" height="4.6" rx="2.3" />
             <rect x="6.5" y="33.8" width="12" height="4.6" rx="2.3" />
           </svg>
-          <div>
+          <div className="flex-1">
             <h4 className="display m-0 text-xl lg:text-[26px]">{t.confusedTitle}</h4>
             <p className="m-0 mt-0.5 text-sm lg:text-[17px]">{t.confusedBody}</p>
           </div>
-        </div>
+          <svg
+            width="10"
+            height="18"
+            viewBox="0 0 10 18"
+            fill="none"
+            aria-hidden="true"
+            className="shrink-0 text-forest"
+          >
+            <path
+              d="M1.5 1.5L8.5 9l-7 7.5"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Link>
       </div>
     </section>
   );
