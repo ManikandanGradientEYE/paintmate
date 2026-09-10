@@ -22,7 +22,8 @@ export default async function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-x-hidden">
+      {/* clip, not hidden: overflow-hidden here would break the pinned panel in Journey */}
+      <main className="overflow-x-clip">
         <HomeHero />
         <BeforeAfter />
         <AboutSection />
