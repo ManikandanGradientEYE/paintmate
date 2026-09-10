@@ -71,7 +71,8 @@ export default function ShopHero() {
       </div>
 
       <div className="frame pad-x mt-[22px] lg:mt-0 lg:grid lg:grid-cols-[397px_1fr] lg:items-start lg:gap-x-[100px] lg:pt-[88px]">
-        <p className="m-0 text-justify text-[15px] leading-[1.7] lg:text-[19px] lg:leading-[1.5]">
+        {/* centred against the two badge cards, which are twice its height */}
+        <p className="m-0 text-justify text-[15px] leading-[1.7] lg:self-center lg:text-[19px] lg:leading-[1.5]">
           {t.shopIntroBody}
         </p>
 
