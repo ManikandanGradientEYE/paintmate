@@ -26,6 +26,8 @@ export default function FigmaBlob({
   className?: string;
 }) {
   const m = mobile ?? desktop;
+  const sx = (p: BlobPlacement) => p.scaleX ?? (p.flipX ? -1 : 1);
+  const sy = (p: BlobPlacement) => p.scaleY ?? (p.flipY ? -1 : 1);
 
   const style = {
     "--blob-image": `url(${src})`,
@@ -34,16 +36,16 @@ export default function FigmaBlob({
     "--blob-x": `${m.left}px`,
     "--blob-y": `${m.top}px`,
     "--blob-rot": `${m.rotation}deg`,
-    "--blob-sx": m.flipX ? "-1" : "1",
-    "--blob-sy": m.flipY ? "-1" : "1",
+    "--blob-sx": `${sx(m)}`,
+    "--blob-sy": `${sy(m)}`,
     "--blob-op": `${m.opacity}`,
     "--blob-w-lg": `${desktop.width}px`,
     "--blob-h-lg": `${desktop.height}px`,
     "--blob-x-lg": `${desktop.left}px`,
     "--blob-y-lg": `${desktop.top}px`,
     "--blob-rot-lg": `${desktop.rotation}deg`,
-    "--blob-sx-lg": desktop.flipX ? "-1" : "1",
-    "--blob-sy-lg": desktop.flipY ? "-1" : "1",
+    "--blob-sx-lg": `${sx(desktop)}`,
+    "--blob-sy-lg": `${sy(desktop)}`,
     "--blob-op-lg": `${desktop.opacity}`,
   } as CSSProperties;
 

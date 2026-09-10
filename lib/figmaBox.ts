@@ -15,6 +15,10 @@
  *   bh = w·|sin θ| + h·|cos θ|
  * and the centre stays put, so left / top gain half that growth.
  * With rotation 0 the correction is 0 and values pass through untouched.
+ *
+ * The correction assumes the element is not scaled; scaleX / scaleY grow the box
+ * about its centre after the fact, so a scaled blob is easier to place by eye in
+ * devtools than to convert.
  */
 export interface BlobPlacement {
   width: number;
@@ -31,6 +35,10 @@ export interface BlobPlacement {
   flipX?: boolean;
   /** mirror vertically (scaleY(-1)) */
   flipY?: boolean;
+  /** explicit scaleX, e.g. 2 to stretch or -1 to mirror; wins over flipX */
+  scaleX?: number;
+  /** explicit scaleY; wins over flipY */
+  scaleY?: number;
 }
 
 /** Values as they appear in Figma's properties panel. */
@@ -48,7 +56,9 @@ export interface FigmaBox {
 }
 
 /** Converts Figma properties-panel values into CSS placement. */
-export function fromFigma(box: FigmaBox & { flipX?: boolean; flipY?: boolean }): BlobPlacement {
+export function fromFigma(
+  box: FigmaBox & { flipX?: boolean; flipY?: boolean; scaleX?: number; scaleY?: number }
+): BlobPlacement {
   const { width, height, left, top } = box;
   const rotation = box.rotation ?? 0;
 
@@ -68,5 +78,7 @@ export function fromFigma(box: FigmaBox & { flipX?: boolean; flipY?: boolean }):
     top: top + (boundingHeight - height) / 2,
     flipX: box.flipX,
     flipY: box.flipY,
+    scaleX: box.scaleX,
+    scaleY: box.scaleY,
   };
 }

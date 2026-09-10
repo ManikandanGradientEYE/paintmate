@@ -2,41 +2,39 @@
 
 import FigmaBlob from "@/components/site/FigmaBlob";
 import { useLanguage } from "@/context/LanguageContext";
-import { fromFigma, type BlobPlacement } from "@/lib/figmaBox";
+import type { BlobPlacement } from "@/lib/figmaBox";
 
 /* ------------------------------------------------------------------------------
- * WHY US BLOB — the same blue stroke as About Paint Mate, turned upside down.
+ * WHY US BLOB — the same blue stroke as About Paint Mate, turned and stretched.
  *
- * Figma quotes this one in page coordinates (top 2203, left 245), and the section
- * starts at page y 2130, so its own top would be 73. It is rotated, so Figma's
- * numbers describe the ROTATED bounding box — fromFigma() converts that to CSS
- * left / top. Values pasted back out of devtools are already converted: drop those
- * straight into the mobile object below rather than through fromFigma().
+ * Plain CSS values, straight out of devtools on `.pm-blob` — inspect it, drag the
+ * numbers, paste them back. scaleY: 2 is the vertical stretch; the component turns
+ * scaleX / scaleY into --blob-sx / --blob-sy.
  *
- * The top is raised to -141 rather than 73. The splash panel below is opaque and
- * starts 247px into the section, so only that band shows the stroke — and the -152
- * turn puts the artwork's sparse edge upwards, so at 73 the only thing above the
- * panel was a 31px sliver. -141 lifts the painted mass into the visible band: it
- * covers rows 143-415 of its 466px box, so this puts 90% of the paint on screen.
+ * Rotation is written unitless here and the component appends deg. Setting
+ * --blob-rot to a bare number in devtools instead makes the whole transform
+ * invalid, so the blob quietly loses its rotation, flip and stretch at once.
  * ------------------------------------------------------------------------------ */
-const WHY_BLOB_DESKTOP: BlobPlacement = fromFigma({
+const WHY_BLOB_DESKTOP: BlobPlacement = {
   width: 318.96,
   height: 357.45,
-  left: 245,
-  top: -141,
-  rotation: -152,
-  opacity: 20, // percent, as Figma shows it
-});
+  left: 310.24,
+  top: 19.95,
+  rotation: 65,
+  opacity: 0.2,
+  flipX: true,
+  scaleY: 2,
+};
 
-// Figma only specifies the desktop stroke. Scaled down for the narrow layout, and
-// sat in the 107px band above the splash card for the same reason as the desktop one.
 const WHY_BLOB_MOBILE: BlobPlacement = {
   width: 175,
   height: 196,
-  left: 175,
-  top: -100,
-  rotation: -152,
-  opacity: 0.25,
+  left: 39,
+  top: -13,
+  rotation: 65,
+  opacity: 0.2,
+  flipX: true,
+  scaleY: 2,
 };
 
 function IconChoose() {
