@@ -196,6 +196,7 @@ export function QuoteProvider({
       paint: { pricePerLitre: selectedPaint.pricePerLitre },
       surface: state.surface,
       addOns: { putty: state.addOns.putty, primer: state.addOns.primer },
+      painterCount: state.painterCount,
       isInLudhiana,
       settings: siteData.pricingSettings,
     });

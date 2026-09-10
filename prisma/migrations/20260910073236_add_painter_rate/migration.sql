@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "PricingSetting" ADD COLUMN     "painterRate" DOUBLE PRECISION NOT NULL DEFAULT 900;

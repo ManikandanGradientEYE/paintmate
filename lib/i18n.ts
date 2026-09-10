@@ -135,6 +135,8 @@ export interface Dictionary {
   estimateGstOn: string;
   estimateWallPutty: string;
   estimateBagsKgLabel: (bags: number, kg: number) => string;
+  estimatePainter: string;
+  estimatePainterCount: (count: number) => string;
   estimateDelivery: string;
   estimateFree: string;
   estimateConfirmedOnWhatsApp: string;
@@ -295,6 +297,8 @@ export const dictionaries: Record<Language, Dictionary> = {
     estimateGstOn: "GST (18%) on paint + primer",
     estimateWallPutty: "Wall putty (incl. GST)",
     estimateBagsKgLabel: (bags, kg) => `${bags} bag${bags > 1 ? "s" : ""} / ${kg} kg`,
+    estimatePainter: "Painter",
+    estimatePainterCount: (count) => `${count} painter${count > 1 ? "s" : ""}`,
     estimateDelivery: "Delivery",
     estimateFree: "Free",
     estimateConfirmedOnWhatsApp: "Confirmed on WhatsApp",
@@ -451,6 +455,8 @@ export const dictionaries: Record<Language, Dictionary> = {
     estimateGstOn: "पेंट + प्राइमर पर GST (18%)",
     estimateWallPutty: "वॉल पुट्टी (GST सहित)",
     estimateBagsKgLabel: (bags, kg) => `${bags} बैग / ${kg} किलो`,
+    estimatePainter: "पेंटर",
+    estimatePainterCount: (count) => `${count} पेंटर`,
     estimateDelivery: "डिलीवरी",
     estimateFree: "मुफ़्त",
     estimateConfirmedOnWhatsApp: "WhatsApp पर तय होगा",
@@ -608,6 +614,8 @@ export const dictionaries: Record<Language, Dictionary> = {
     estimateGstOn: "ਪੇਂਟ + ਪ੍ਰਾਈਮਰ ਉੱਤੇ GST (18%)",
     estimateWallPutty: "ਵਾਲ ਪੁੱਟੀ (GST ਸਮੇਤ)",
     estimateBagsKgLabel: (bags, kg) => `${bags} ਬੈਗ / ${kg} ਕਿੱਲੋ`,
+    estimatePainter: "ਪੇਂਟਰ",
+    estimatePainterCount: (count) => `${count} ਪੇਂਟਰ`,
     estimateDelivery: "ਡਿਲੀਵਰੀ",
     estimateFree: "ਮੁਫ਼ਤ",
     estimateConfirmedOnWhatsApp: "WhatsApp ਉੱਤੇ ਤੈਅ ਹੋਵੇਗਾ",

@@ -73,6 +73,9 @@ model PricingSetting {
   puttyBagKg                        Float  @default(30)
   puttyPricePerBag                  Float  @default(515)
   puttyCoverageSqftPerKg            Float  @default(11.11)
+  /// Charge for one painter. The shop quotes painters per head, so the estimate
+  /// multiplies this by the number of painters the customer adds.
+  painterRate                       Float  @default(900)
 }
 
 model Lead {

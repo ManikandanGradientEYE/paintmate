@@ -71,6 +71,17 @@ const GROUPS: GroupDef[] = [
     ],
   },
   {
+    title: "Painter",
+    description: "Charged per painter the customer adds. Labour sits outside the GST line.",
+    fields: [
+      {
+        key: "painterRate",
+        label: "Charge per painter",
+        suffix: "₹ / painter",
+      },
+    ],
+  },
+  {
     title: "Tax & delivery",
     fields: [
       {

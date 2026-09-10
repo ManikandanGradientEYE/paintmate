@@ -84,6 +84,7 @@ export const pricingSettingsSchema = z.object({
   puttyBagKg: z.number().positive().max(1000),
   puttyPricePerBag: z.number().positive().max(100000),
   puttyCoverageSqftPerKg: z.number().positive().max(1000),
+  painterRate: z.number().min(0).max(100000),
 });
 
 export const leadUpdateSchema = z.object({

@@ -41,6 +41,7 @@ export async function POST(request: NextRequest) {
     paint: { pricePerLitre: paint.pricePerLitre },
     surface: input.surface,
     addOns: { putty: input.addOns.putty, primer: input.addOns.primer },
+    painterCount: input.addOns.painterCount,
     isInLudhiana,
     settings,
   });

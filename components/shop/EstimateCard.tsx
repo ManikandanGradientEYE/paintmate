@@ -98,6 +98,13 @@ export default function EstimateCard() {
           value={formatINR(estimate.puttyCost)}
         />
       )}
+      {estimate.painterCount > 0 && (
+        <Line
+          label={t.estimatePainter}
+          sub={t.estimatePainterCount(estimate.painterCount)}
+          value={formatINR(estimate.painterCost)}
+        />
+      )}
       <Line
         label={t.estimateDelivery}
         plain

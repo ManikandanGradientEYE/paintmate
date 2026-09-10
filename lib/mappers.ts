@@ -101,6 +101,7 @@ export function toPricingSettings(row: PricingSettingRow): PricingSettings {
     puttyBagKg: row.puttyBagKg,
     puttyPricePerBag: row.puttyPricePerBag,
     puttyCoverageSqftPerKg: row.puttyCoverageSqftPerKg,
+    painterRate: row.painterRate,
   };
 }
 

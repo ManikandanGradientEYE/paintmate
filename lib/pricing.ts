@@ -15,6 +15,7 @@ export const DEFAULT_PRICING_SETTINGS: PricingSettings = {
   puttyBagKg: 30,
   puttyPricePerBag: 515,
   puttyCoverageSqftPerKg: 1000 / 90,
+  painterRate: 900,
 };
 
 export function primerPriceFor(settings: PricingSettings, surface: Surface): number {
@@ -29,6 +30,8 @@ interface CalculateEstimateInput {
   paint: PaintLike;
   surface: Surface;
   addOns: { putty: boolean; primer: boolean };
+  /** how many painters the customer added; 0 means none */
+  painterCount: number;
   isInLudhiana: boolean;
   settings: PricingSettings;
 }
@@ -39,6 +42,7 @@ export function calculateEstimate({
   paint,
   surface,
   addOns,
+  painterCount,
   isInLudhiana,
   settings,
 }: CalculateEstimateInput): EstimateBreakdown {
@@ -64,9 +68,14 @@ export function calculateEstimate({
     : 0;
   const puttyCost = puttyBags * settings.puttyPricePerBag;
 
+  // Painter labour is quoted per head and sits outside the GST line, which covers
+  // paint + primer only.
+  const painterCost = painterCount * settings.painterRate;
+
   const deliveryFee = isInLudhiana ? settings.deliveryFeeLudhiana : null;
 
-  const total = paintCost + primerCost + gst + puttyCost + (deliveryFee ?? 0);
+  const total =
+    paintCost + primerCost + gst + puttyCost + painterCost + (deliveryFee ?? 0);
   const rangeLow = Math.round(total * (1 - settings.estimateRangePct));
   const rangeHigh = Math.round(total * (1 + settings.estimateRangePct));
 
@@ -81,6 +90,8 @@ export function calculateEstimate({
     puttyBags,
     puttyKg,
     puttyCost,
+    painterCount,
+    painterCost,
     deliveryFee,
     total,
     rangeLow,
