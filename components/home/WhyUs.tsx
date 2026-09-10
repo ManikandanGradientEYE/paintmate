@@ -1,6 +1,37 @@
 "use client";
 
+import FigmaBlob from "@/components/site/FigmaBlob";
 import { useLanguage } from "@/context/LanguageContext";
+import { fromFigma, type BlobPlacement } from "@/lib/figmaBox";
+
+/* ------------------------------------------------------------------------------
+ * WHY US BLOB — the same blue stroke as About Paint Mate, turned upside down.
+ *
+ * Figma quotes this one in page coordinates (top 2203, left 245) and the section
+ * starts at page y 2130, so its own top is 73. It is rotated, so Figma's numbers
+ * describe the ROTATED bounding box — fromFigma() converts that to CSS left / top.
+ * Values pasted back out of devtools are already converted: drop them straight into
+ * the mobile object below rather than through fromFigma().
+ * ------------------------------------------------------------------------------ */
+const WHY_BLOB_DESKTOP: BlobPlacement = fromFigma({
+  width: 318.96,
+  height: 357.45,
+  left: 245,
+  top: 73,
+  rotation: -152,
+  opacity: 20, // percent, as Figma shows it
+});
+
+// Figma only specifies the desktop stroke. Scaled down and moved to the right edge
+// for the narrow layout, which is where the cream blob it replaces used to sit.
+const WHY_BLOB_MOBILE: BlobPlacement = {
+  width: 175,
+  height: 196,
+  left: 205,
+  top: 10,
+  rotation: -152,
+  opacity: 0.25,
+};
 
 function IconChoose() {
   return (
@@ -58,8 +89,15 @@ export default function WhyUs() {
     { icon: <IconKnow />, title: t.why2Title, body: t.why2Body, tone: "mint", desktopOnly: true },
   ];
 
+  // No `blob` class: the blue stroke above replaces the cream blob here too.
   return (
-    <section className="blob relative overflow-hidden pt-[58px] lg:pt-[132px] [&::before]:right-[-60px] [&::before]:top-5 [&::before]:h-[280px] [&::before]:w-[200px] [&::before]:scale-x-[-1] [&::before]:opacity-75 lg:[&::before]:left-[190px] lg:[&::before]:right-auto lg:[&::before]:top-[60px] lg:[&::before]:h-[520px] lg:[&::before]:w-[420px] lg:[&::before]:scale-x-100 lg:[&::before]:opacity-[.55]">
+    <section className="relative overflow-hidden pt-[58px] lg:pt-[132px]">
+      <FigmaBlob
+        desktop={WHY_BLOB_DESKTOP}
+        mobile={WHY_BLOB_MOBILE}
+        src="/assets/90fc13fd43caea53aad965a7ea6b9bbe2882c7bf.png"
+      />
+
       <h2 className="display sec-title relative mb-[22px] lg:mb-[72px]">
         {t.whyUsTitle}
         <span className="lg:hidden">!</span>
