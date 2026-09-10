@@ -62,9 +62,15 @@ function buildInitialState(siteData: SiteData): QuoteState {
   const firstRecommendedInterior = siteData.paints.find(
     (p) => p.recommended && p.surfaces.includes("interior")
   );
+  // Open on 1 BHK rather than a blank slate, so the first estimate on screen is a
+  // real one. Matched by label so renaming or reordering the sizes in admin cannot
+  // leave this pointing at a row that no longer exists.
+  const defaultSize =
+    siteData.homeSizes.find((h) => /1\s*bhk/i.test(h.label)) ?? siteData.homeSizes[0];
+
   return {
-    homeSizeId: null,
-    areaSqft: DEFAULT_AREA_SQFT,
+    homeSizeId: defaultSize?.id ?? null,
+    areaSqft: defaultSize?.sqft ?? DEFAULT_AREA_SQFT,
     surface: "interior",
     coats: 2,
     selectedPaintId: firstRecommendedInterior?.id ?? siteData.paints[0]?.id ?? "",
