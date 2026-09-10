@@ -63,17 +63,20 @@ export default function Reviews({ reviews }: { reviews: Review[] }) {
         {reviews.map((review, i) => (
           <article
             key={review.id}
-            className={`w-[280px] rounded-[16px] bg-sand p-6 lg:w-auto lg:rounded-[18px] lg:px-[34px] lg:pb-10 lg:pt-[34px] ${tilts[i % tilts.length]}`}
+            className={`w-[246px] -rotate-[1.2deg] rounded-[16px] bg-sand px-[22px] py-[26px] shadow-[0_6px_18px_rgba(0,0,0,.05)] lg:w-auto lg:rounded-[18px] lg:px-[34px] lg:pb-10 lg:pt-[34px] ${tilts[i % tilts.length]}`}
           >
+            {/* the quote mark hangs top-right, in white on the sand card */}
             <span
               aria-hidden="true"
-              className="display block text-[40px] leading-none text-lime lg:mb-2.5 lg:text-[56px]"
+              className="display mb-1.5 mr-1 block text-right text-[40px] leading-[.6] text-white lg:mb-2.5 lg:text-[56px]"
             >
               &rdquo;
             </span>
-            <p className="m-0 text-[15px] leading-[1.5] lg:text-[18px]">{review.body}</p>
-            <div className="mt-4 text-[15px] lg:mt-[22px] lg:text-[18px]">
-              <b className="block font-extrabold">{review.name}</b>
+            <p className="m-0 text-[14.5px] leading-[1.52] lg:text-[18px] lg:leading-[1.5]">
+              {review.body}
+            </p>
+            <div className="mt-4 text-[14.5px] leading-[1.42] lg:mt-[22px] lg:text-[18px]">
+              <b className="block font-extrabold italic">{review.name}</b>
               {review.role}
             </div>
           </article>
