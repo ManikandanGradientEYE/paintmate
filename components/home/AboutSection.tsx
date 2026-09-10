@@ -49,8 +49,9 @@ export default function AboutSection() {
     { n: t.statPlantsN, label: t.statPlantsT, tone: "lime" as const },
   ];
 
+  // No `blob` class on the section: the blue stroke replaces the cream blob here.
   return (
-    <section className="blob frame relative overflow-hidden px-4 pt-[46px] lg:grid lg:grid-cols-[570px_1fr] lg:items-start lg:gap-x-14 lg:px-[var(--pad)] lg:pt-[200px] [&::before]:left-[-70px] [&::before]:top-2.5 [&::before]:h-[330px] [&::before]:w-[220px] [&::before]:opacity-80 lg:[&::before]:left-0 lg:[&::before]:top-5 lg:[&::before]:h-[600px] lg:[&::before]:w-[430px] lg:[&::before]:opacity-60">
+    <section className="frame relative overflow-hidden px-4 pt-[46px] lg:grid lg:grid-cols-[570px_1fr] lg:items-start lg:gap-x-14 lg:px-[var(--pad)] lg:pt-[200px]">
       <FigmaBlob
         desktop={ABOUT_BLOB_DESKTOP}
         mobile={ABOUT_BLOB_MOBILE}
