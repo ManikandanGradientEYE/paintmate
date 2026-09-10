@@ -14,7 +14,7 @@ export default function Reviews() {
         {tilts.map((tilt, i) => (
           <article
             key={i}
-            className={`w-[280px] rounded-[16px] bg-mint p-6 lg:w-auto lg:rounded-[18px] lg:px-[34px] lg:pb-10 lg:pt-[34px] ${tilt}`}
+            className={`w-[280px] rounded-[16px] bg-sand p-6 lg:w-auto lg:rounded-[18px] lg:px-[34px] lg:pb-10 lg:pt-[34px] ${tilt}`}
           >
             <span
               aria-hidden="true"
