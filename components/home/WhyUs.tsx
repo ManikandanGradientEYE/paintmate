@@ -7,28 +7,34 @@ import { fromFigma, type BlobPlacement } from "@/lib/figmaBox";
 /* ------------------------------------------------------------------------------
  * WHY US BLOB — the same blue stroke as About Paint Mate, turned upside down.
  *
- * Figma quotes this one in page coordinates (top 2203, left 245) and the section
- * starts at page y 2130, so its own top is 73. It is rotated, so Figma's numbers
- * describe the ROTATED bounding box — fromFigma() converts that to CSS left / top.
- * Values pasted back out of devtools are already converted: drop them straight into
- * the mobile object below rather than through fromFigma().
+ * Figma quotes this one in page coordinates (top 2203, left 245), and the section
+ * starts at page y 2130, so its own top would be 73. It is rotated, so Figma's
+ * numbers describe the ROTATED bounding box — fromFigma() converts that to CSS
+ * left / top. Values pasted back out of devtools are already converted: drop those
+ * straight into the mobile object below rather than through fromFigma().
+ *
+ * The top is raised to -141 rather than 73. The splash panel below is opaque and
+ * starts 247px into the section, so only that band shows the stroke — and the -152
+ * turn puts the artwork's sparse edge upwards, so at 73 the only thing above the
+ * panel was a 31px sliver. -141 lifts the painted mass into the visible band: it
+ * covers rows 143-415 of its 466px box, so this puts 90% of the paint on screen.
  * ------------------------------------------------------------------------------ */
 const WHY_BLOB_DESKTOP: BlobPlacement = fromFigma({
   width: 318.96,
   height: 357.45,
   left: 245,
-  top: 73,
+  top: -141,
   rotation: -152,
   opacity: 20, // percent, as Figma shows it
 });
 
-// Figma only specifies the desktop stroke. Scaled down and moved to the right edge
-// for the narrow layout, which is where the cream blob it replaces used to sit.
+// Figma only specifies the desktop stroke. Scaled down for the narrow layout, and
+// sat in the 107px band above the splash card for the same reason as the desktop one.
 const WHY_BLOB_MOBILE: BlobPlacement = {
   width: 175,
   height: 196,
-  left: 205,
-  top: 10,
+  left: 175,
+  top: -100,
   rotation: -152,
   opacity: 0.25,
 };
