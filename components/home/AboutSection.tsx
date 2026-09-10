@@ -1,6 +1,43 @@
 "use client";
 
+import FigmaBlob from "@/components/site/FigmaBlob";
 import { useLanguage } from "@/context/LanguageContext";
+import type { BlobPlacement } from "@/lib/figmaBox";
+
+/* ------------------------------------------------------------------------------
+ * ABOUT BLOB POSITION — the blue stroke behind this section.
+ *
+ * Plain CSS values, i.e. what devtools shows on `.pm-blob`: inspect it, drag the
+ * numbers until it looks right, then paste them back here. See HomeHero for the
+ * full notes, including how to convert Figma's properties panel with fromFigma().
+ *
+ * top / left are measured from this section's own top-left corner, and the section
+ * clips whatever falls outside it, so the stroke can safely hang off the edge.
+ *
+ * Figma quoted this one as top 1200 / left -57, but those are page coordinates: the
+ * section itself starts at y 1211, so the stroke belongs at the section's top edge,
+ * 11px above it. Dropping 1200 in as-is would park it below the section and clip it
+ * away entirely.
+ * ------------------------------------------------------------------------------ */
+const ABOUT_BLOB_DESKTOP: BlobPlacement = {
+  width: 549,
+  height: 487,
+  left: -57,
+  top: -11,
+  rotation: 0,
+  opacity: 0.2,
+};
+
+// Figma only specifies the desktop stroke; this keeps the same edge bleed and
+// proportions at half scale so the narrow layout is not swamped by it.
+const ABOUT_BLOB_MOBILE: BlobPlacement = {
+  width: 275,
+  height: 244,
+  left: -60,
+  top: -10,
+  rotation: 0,
+  opacity: 0.25,
+};
 
 export default function AboutSection() {
   const { t } = useLanguage();
@@ -14,6 +51,12 @@ export default function AboutSection() {
 
   return (
     <section className="blob frame relative overflow-hidden px-4 pt-[46px] lg:grid lg:grid-cols-[570px_1fr] lg:items-start lg:gap-x-14 lg:px-[var(--pad)] lg:pt-[200px] [&::before]:left-[-70px] [&::before]:top-2.5 [&::before]:h-[330px] [&::before]:w-[220px] [&::before]:opacity-80 lg:[&::before]:left-0 lg:[&::before]:top-5 lg:[&::before]:h-[600px] lg:[&::before]:w-[430px] lg:[&::before]:opacity-60">
+      <FigmaBlob
+        desktop={ABOUT_BLOB_DESKTOP}
+        mobile={ABOUT_BLOB_MOBILE}
+        src="/assets/90fc13fd43caea53aad965a7ea6b9bbe2882c7bf.png"
+      />
+
       <h2 className="display sec-title relative mb-4 lg:col-start-1 lg:row-start-1 lg:mb-[70px] lg:text-left">
         {t.aboutTitle}
       </h2>
