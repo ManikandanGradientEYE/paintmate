@@ -7,7 +7,9 @@ import type {
   Lead as LeadRow,
   Paint as PaintRow,
   PricingSetting as PricingSettingRow,
+  Review as ReviewRow,
   Shade as ShadeRow,
+  SocialLink as SocialLinkRow,
 } from "@prisma/client";
 import {
   AddOnDef,
@@ -19,8 +21,10 @@ import {
   LeadStatus,
   Paint,
   PricingSettings,
+  Review,
   Shade,
   ShadeCategory,
+  SocialLink,
   Surface,
   Tier,
 } from "@/types";
@@ -148,5 +152,24 @@ export function toColourRoom(
       .slice()
       .sort((a, b) => a.sortOrder - b.sortOrder)
       .map((s) => ({ id: s.id, hex: s.hex, sortOrder: s.sortOrder })),
+  };
+}
+
+export function toReview(row: ReviewRow): Review {
+  return {
+    id: row.id,
+    body: row.body,
+    name: row.name,
+    role: row.role,
+    sortOrder: row.sortOrder,
+  };
+}
+
+export function toSocialLink(row: SocialLinkRow): SocialLink {
+  return {
+    id: row.id,
+    platform: row.platform,
+    url: row.url,
+    sortOrder: row.sortOrder,
   };
 }

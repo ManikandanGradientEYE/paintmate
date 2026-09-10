@@ -11,6 +11,8 @@ const LINKS = [
   { href: "/admin/add-ons", label: "Add-ons" },
   { href: "/admin/catalog", label: "Catalog" },
   { href: "/admin/colour", label: "Colour" },
+  { href: "/admin/reviews", label: "Reviews" },
+  { href: "/admin/connect", label: "Connect with us" },
   { href: "/admin/pricing", label: "Pricing" },
 ];
 

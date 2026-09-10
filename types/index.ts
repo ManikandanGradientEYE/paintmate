@@ -159,3 +159,33 @@ export interface ColourRoom {
   sortOrder: number;
   swatches: ColourSwatch[];
 }
+
+/** A customer testimonial on the home page. */
+export interface Review {
+  id: string;
+  body: string;
+  name: string;
+  /** where they are from — company, town */
+  role: string;
+  sortOrder: number;
+}
+
+/** Platforms the footer has an icon for. Anything else renders a generic link glyph. */
+export const SOCIAL_PLATFORMS = [
+  "facebook",
+  "instagram",
+  "linkedin",
+  "twitter",
+  "youtube",
+  "whatsapp",
+] as const;
+
+export type SocialPlatform = (typeof SOCIAL_PLATFORMS)[number];
+
+/** One icon in the footer's "Connect with us" row. */
+export interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  sortOrder: number;
+}

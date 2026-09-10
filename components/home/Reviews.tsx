@@ -3,6 +3,7 @@
 import FigmaBlob from "@/components/site/FigmaBlob";
 import { useLanguage } from "@/context/LanguageContext";
 import { fromFigma, type BlobPlacement } from "@/lib/figmaBox";
+import { Review } from "@/types";
 
 /* ------------------------------------------------------------------------------
  * REVIEWS BLOB — the lime stroke, in place of the cream blob.
@@ -31,9 +32,20 @@ const REVIEWS_BLOB_MOBILE: BlobPlacement = {
   opacity: 0.25,
 };
 
-export default function Reviews() {
+export default function Reviews({ reviews }: { reviews: Review[] }) {
   const { t } = useLanguage();
+  // the three tilts repeat, so any number of reviews still fans out the same way
   const tilts = ["lg:-rotate-[1.4deg]", "lg:rotate-[.5deg]", "lg:rotate-[1.4deg]"];
+
+  if (reviews.length === 0) return null;
+
+  // one or two reviews would leave a three-column grid looking half-empty
+  const gridCols =
+    reviews.length === 1
+      ? "lg:mx-auto lg:max-w-[430px] lg:grid-cols-1"
+      : reviews.length === 2
+        ? "lg:mx-auto lg:max-w-[900px] lg:grid-cols-2"
+        : "lg:grid-cols-3";
 
   return (
     <section className="frame relative overflow-hidden pt-[46px] lg:px-[var(--pad)] lg:pt-[200px]">
@@ -45,11 +57,13 @@ export default function Reviews() {
 
       <h2 className="display sec-title relative mb-6 lg:mb-[76px]">{t.reviewsTitle}</h2>
 
-      <div className="hscroll relative px-4 pb-1.5 lg:grid lg:grid-cols-3 lg:items-start lg:gap-[47px] lg:overflow-visible lg:px-0">
-        {tilts.map((tilt, i) => (
+      <div
+        className={`hscroll relative px-4 pb-1.5 lg:grid lg:items-start lg:gap-[47px] lg:overflow-visible lg:px-0 ${gridCols}`}
+      >
+        {reviews.map((review, i) => (
           <article
-            key={i}
-            className={`w-[280px] rounded-[16px] bg-sand p-6 lg:w-auto lg:rounded-[18px] lg:px-[34px] lg:pb-10 lg:pt-[34px] ${tilt}`}
+            key={review.id}
+            className={`w-[280px] rounded-[16px] bg-sand p-6 lg:w-auto lg:rounded-[18px] lg:px-[34px] lg:pb-10 lg:pt-[34px] ${tilts[i % tilts.length]}`}
           >
             <span
               aria-hidden="true"
@@ -57,10 +71,10 @@ export default function Reviews() {
             >
               &rdquo;
             </span>
-            <p className="m-0 text-[15px] leading-[1.5] lg:text-[18px]">{t.reviewBody}</p>
+            <p className="m-0 text-[15px] leading-[1.5] lg:text-[18px]">{review.body}</p>
             <div className="mt-4 text-[15px] lg:mt-[22px] lg:text-[18px]">
-              <b className="block font-extrabold">{t.reviewName}</b>
-              {t.reviewRole}
+              <b className="block font-extrabold">{review.name}</b>
+              {review.role}
             </div>
           </article>
         ))}

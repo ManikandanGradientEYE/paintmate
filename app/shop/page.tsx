@@ -5,6 +5,7 @@ import {
   toPaint,
   toPricingSettings,
   toShade,
+  toSocialLink,
 } from "@/lib/mappers";
 import { DEFAULT_PRICING_SETTINGS } from "@/lib/pricing";
 import { SiteData } from "@/types";
@@ -55,7 +56,10 @@ async function loadSiteData(): Promise<SiteData> {
 }
 
 export default async function ShopPage() {
-  const siteData = await loadSiteData();
+  const [siteData, socialRows] = await Promise.all([
+    loadSiteData(),
+    prisma.socialLink.findMany({ orderBy: { sortOrder: "asc" } }),
+  ]);
 
   return (
     <QuoteProvider siteData={siteData}>
@@ -80,7 +84,7 @@ export default async function ShopPage() {
           </div>
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter socials={socialRows.map(toSocialLink)} />
       <ShopStickyBar />
     </QuoteProvider>
   );

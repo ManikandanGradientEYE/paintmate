@@ -126,3 +126,21 @@ model ColourSwatch {
   hex       String
   sortOrder Int        @default(0)
 }
+
+/// A customer testimonial in "Know from our customers" on the home page.
+model Review {
+  id        String @id @default(cuid())
+  body      String
+  name      String
+  role      String
+  sortOrder Int    @default(0)
+}
+
+/// One icon in the footer's "Connect with us" row. `platform` picks the icon and must
+/// be one of the keys the footer knows; anything else falls back to a link glyph.
+model SocialLink {
+  id        String @id @default(cuid())
+  platform  String
+  url       String
+  sortOrder Int    @default(0)
+}

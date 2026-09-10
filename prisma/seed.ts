@@ -5,6 +5,8 @@ import { shades } from "../data/shades";
 import { addOnDefs } from "../data/addOns";
 import { catalogProducts } from "../data/catalog";
 import { colourRooms, DEFAULT_ROOM_IMAGE } from "../data/colourRooms";
+import { reviews } from "../data/reviews";
+import { socialLinks } from "../data/socials";
 import { DEFAULT_PRICING_SETTINGS } from "../lib/pricing";
 
 const prisma = new PrismaClient();
@@ -17,6 +19,8 @@ async function main() {
   await prisma.catalogProduct.deleteMany();
   await prisma.colourSwatch.deleteMany();
   await prisma.colourRoom.deleteMany();
+  await prisma.review.deleteMany();
+  await prisma.socialLink.deleteMany();
 
   await prisma.homeSize.createMany({
     data: homeSizes.map((h, i) => ({
@@ -87,6 +91,14 @@ async function main() {
       },
     });
   }
+
+  await prisma.review.createMany({
+    data: reviews.map((r, i) => ({ ...r, sortOrder: i })),
+  });
+
+  await prisma.socialLink.createMany({
+    data: socialLinks.map((l, i) => ({ ...l, sortOrder: i })),
+  });
 
   await prisma.pricingSetting.upsert({
     where: { id: "singleton" },

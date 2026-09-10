@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SOCIAL_PLATFORMS } from "@/types";
 
 export const leadSubmissionSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(120),
@@ -106,4 +107,17 @@ export const colourSwatchSchema = z.object({
 
 export const colourSwatchUpdateSchema = colourSwatchSchema.partial().omit({
   roomId: true,
+});
+
+export const reviewSchema = z.object({
+  body: z.string().trim().min(1).max(1000),
+  name: z.string().trim().min(1).max(80),
+  role: z.string().trim().max(120).default(""),
+  sortOrder: z.number().int().optional().default(0),
+});
+
+export const socialLinkSchema = z.object({
+  platform: z.enum(SOCIAL_PLATFORMS),
+  url: z.string().trim().url("Use a full address, e.g. https://instagram.com/paintmate").max(500),
+  sortOrder: z.number().int().optional().default(0),
 });
