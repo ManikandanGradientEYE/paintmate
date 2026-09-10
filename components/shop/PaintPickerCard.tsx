@@ -63,7 +63,8 @@ function PaintRow({
         <span className="block text-[15px] font-extrabold leading-tight tracking-[-0.012em] lg:text-[21px]">
           {paint.name}
         </span>
-        {!plain && paint.whyPick && (
+        {/* other brands get this too — `plain` only drops the recommended styling */}
+        {paint.whyPick && (
           <span className="mt-[5px] block truncate border-b border-black/20 pb-[7px] text-[11px] font-bold lg:mt-1.5 lg:pb-[9px] lg:text-[15px]">
             {paint.whyPick}
           </span>
