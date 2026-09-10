@@ -1,6 +1,8 @@
 "use client";
 
+import FigmaBlob from "@/components/site/FigmaBlob";
 import { useLanguage } from "@/context/LanguageContext";
+import { HERO_BLOB_DESKTOP, HERO_BLOB_MOBILE } from "@/lib/blobs";
 
 function IconDelivery() {
   return (
@@ -39,7 +41,10 @@ export default function ShopHero() {
   const { t } = useLanguage();
 
   return (
-    <section className="blob relative overflow-hidden pt-[38px] lg:pt-[150px] [&::before]:left-[-60px] [&::before]:top-0 [&::before]:h-[290px] [&::before]:w-[190px] [&::before]:opacity-80 lg:[&::before]:left-0 lg:[&::before]:h-[640px] lg:[&::before]:w-[470px] lg:[&::before]:opacity-[.55]">
+    <section className="relative overflow-hidden pt-[38px] lg:pt-[150px]">
+      {/* the home page's hero blob, shared so both banners match */}
+      <FigmaBlob desktop={HERO_BLOB_DESKTOP} mobile={HERO_BLOB_MOBILE} />
+
       <h1 className="display relative text-center text-[38px] leading-[1.05] lg:text-[56px] lg:leading-[1.1]">
         {t.shopHeroTitle}{" "}
         <span className="block text-lime lg:inline">{t.shopHeroTitleAccent}</span>
