@@ -60,14 +60,14 @@ export default function OurWork() {
         </span>
       </div>
 
-      <div className="mt-9 text-center lg:mt-20">
+      {/* <div className="mt-9 text-center lg:mt-20">
         <Link
           href="/shop"
           className="inline-block rounded-pill bg-forest px-9 py-4 text-base font-extrabold uppercase tracking-wide text-white lg:px-12 lg:py-[22px] lg:text-[22px]"
         >
           {t.workViewGallery}
         </Link>
-      </div>
+      </div> */}
     </section>
   );
 }
