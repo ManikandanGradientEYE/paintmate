@@ -30,7 +30,10 @@ export default function OurWork() {
 
   return (
     <section className="blob relative overflow-hidden pt-[46px] lg:pt-[132px] [&::before]:right-[-70px] [&::before]:top-1.5 [&::before]:h-[300px] [&::before]:w-[210px] [&::before]:scale-x-[-1] [&::before]:opacity-80 lg:[&::before]:right-0 lg:[&::before]:top-20 lg:[&::before]:h-[560px] lg:[&::before]:w-[420px] lg:[&::before]:opacity-50">
-      <h2 className="display sec-title relative mb-5 lg:mb-[52px]">{t.workTitle}</h2>
+      <h2 className="display sec-title relative mb-2 lg:mb-3">{t.workTitle}</h2>
+      <p className="relative mb-5 px-4 text-center text-[15px] leading-[1.6] lg:mb-[52px] lg:text-[19px]">
+        {t.workLead}
+      </p>
 
       <div className="flex gap-0.5 overflow-x-auto [scrollbar-width:none] lg:grid lg:grid-cols-[337fr_338fr_765fr] lg:overflow-visible">
         <Shot src="/assets/work1.jpg" tag={t.workTagLocation} />
