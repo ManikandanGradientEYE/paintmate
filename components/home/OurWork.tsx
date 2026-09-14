@@ -33,6 +33,7 @@ export default function OurWork() {
       <h2 className="display sec-title relative mb-2 lg:mb-3">{t.workTitle}</h2>
       <p className="relative mb-5 px-4 text-center text-[15px] leading-[1.6] lg:mb-[52px] lg:text-[19px]">
         {t.workLead}
+        <span className="block">{t.workLeadSub}</span>
       </p>
 
       <div className="flex gap-0.5 overflow-x-auto [scrollbar-width:none] lg:grid lg:grid-cols-[337fr_338fr_765fr] lg:overflow-visible">

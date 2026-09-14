@@ -44,6 +44,7 @@ export interface Dictionary {
   /* ---------- home: our work ---------- */
   workTitle: string;
   workLead: string;
+  workLeadSub: string;
   workTagLocation: string;
   workTagVilla: string;
   workTagNorbu: string;
@@ -205,8 +206,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     why3Title: "Buy without the hassle",
     why3Body: "Choose, order on WhatsApp, and get it delivered to your doorstep.",
 
-    workTitle: "Where Jiwan Paints Comes to Life",
-    workLead: "Spaces Transformed with Jiwan Paints",
+    workTitle: "Our Work",
+    workLead: "Where Jiwan Paints Comes to Life",
+    workLeadSub: "Spaces Transformed with Jiwan Paints",
     workTagLocation: "Location",
     workTagVilla: "Serene Family Villa",
     workTagNorbu: "Norbu The Montanna — IHCL Seleqtions",
@@ -369,8 +371,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     why3Title: "बिना झंझट ख़रीदें",
     why3Body: "चुनें, WhatsApp पर ऑर्डर करें और घर बैठे डिलीवरी पाएँ।",
 
-    workTitle: "जहाँ जीवन पेंट्स जीवंत हो उठते हैं",
-    workLead: "जीवन पेंट्स से संवरी हुई जगहें",
+    workTitle: "हमारा काम",
+    workLead: "जहाँ जीवन पेंट्स जीवंत हो उठते हैं",
+    workLeadSub: "जीवन पेंट्स से संवरी हुई जगहें",
     workTagLocation: "लोकेशन",
     workTagVilla: "सुकून भरा फैमिली विला",
     workTagNorbu: "नोरबू द मोंटाना — IHCL सेलेक्शंस",
@@ -530,8 +533,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     why3Title: "ਬਿਨਾਂ ਝੰਜਟ ਖ਼ਰੀਦੋ",
     why3Body: "ਚੁਣੋ, WhatsApp ਉੱਤੇ ਆਰਡਰ ਕਰੋ ਅਤੇ ਘਰ ਬੈਠੇ ਡਿਲੀਵਰੀ ਲਵੋ।",
 
-    workTitle: "ਜਿੱਥੇ ਜੀਵਨ ਪੇਂਟਸ ਜੀਵੰਤ ਹੋ ਉੱਠਦੇ ਹਨ",
-    workLead: "ਜੀਵਨ ਪੇਂਟਸ ਨਾਲ ਸੰਵਾਰੀਆਂ ਥਾਵਾਂ",
+    workTitle: "ਸਾਡਾ ਕੰਮ",
+    workLead: "ਜਿੱਥੇ ਜੀਵਨ ਪੇਂਟਸ ਜੀਵੰਤ ਹੋ ਉੱਠਦੇ ਹਨ",
+    workLeadSub: "ਜੀਵਨ ਪੇਂਟਸ ਨਾਲ ਸੰਵਾਰੀਆਂ ਥਾਵਾਂ",
     workTagLocation: "ਲੋਕੇਸ਼ਨ",
     workTagVilla: "ਸ਼ਾਂਤ ਫੈਮਿਲੀ ਵਿਲਾ",
     workTagNorbu: "ਨੋਰਬੂ ਦ ਮੋਂਟਾਨਾ — IHCL ਸਲੈਕਸ਼ਨਜ਼",
