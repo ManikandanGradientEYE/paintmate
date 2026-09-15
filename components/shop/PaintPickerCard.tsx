@@ -79,7 +79,7 @@ function PaintRow({
 }
 
 export default function PaintPickerCard() {
-  const { state, dispatch, availablePaints } = useQuote();
+  const { state, dispatch, availablePaints, jiwanSwitch } = useQuote();
   const { t } = useLanguage();
 
   return (
@@ -123,6 +123,27 @@ export default function PaintPickerCard() {
             {t.paintPricesIndicative}
           </p>
         </>
+      )}
+
+      {/* only when a Jiwan paint does the same job for less than the one picked */}
+      {jiwanSwitch && (
+        <div className="mt-4 flex items-center gap-3 rounded-xl border-[1.5px] border-lime bg-pale px-4 py-3.5 lg:gap-5 lg:px-5 lg:py-4">
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15px] font-extrabold leading-tight lg:text-[18px]">
+              {t.paintSwitchTitle(jiwanSwitch.paint.name)}
+            </span>
+            <span className="mt-1 block text-[13.5px] leading-[1.35] lg:text-[15px]">
+              {t.paintSwitchSave(formatINR(jiwanSwitch.saving))}
+            </span>
+          </span>
+          <button
+            type="button"
+            onClick={() => dispatch({ type: "SET_PAINT", id: jiwanSwitch.paint.id })}
+            className="shrink-0 rounded-pill bg-forest px-5 py-2.5 text-sm font-extrabold text-white lg:px-6 lg:py-3 lg:text-base"
+          >
+            {t.paintSwitchCta}
+          </button>
+        </div>
       )}
     </section>
   );

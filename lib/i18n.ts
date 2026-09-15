@@ -105,6 +105,9 @@ export interface Dictionary {
   paintChooseYourPaint: string;
   paintRecommended: string;
   paintOtherBrands: string;
+  paintSwitchTitle: (name: string) => string;
+  paintSwitchSave: (amount: string) => string;
+  paintSwitchCta: string;
   paintPricesIndicative: string;
   paintWhyThisPick: string;
   tierValue: string;
@@ -270,6 +273,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     paintChooseYourPaint: "Choose your paint",
     paintRecommended: "Recommended",
     paintOtherBrands: "Other Brands",
+    paintSwitchTitle: (name) => `Switch to ${name}`,
+    paintSwitchSave: (amount) => `and save ${amount} on this job`,
+    paintSwitchCta: "Switch",
     paintPricesIndicative:
       "Prices for other brands are approx. MRP indicative only. Final price confirmed on WhatsApp",
     paintWhyThisPick: "Why this pick",
@@ -432,6 +438,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     paintChooseYourPaint: "अपना पेंट चुनें",
     paintRecommended: "अनुशंसित",
     paintOtherBrands: "अन्य ब्रांड",
+    paintSwitchTitle: (name) => `${name} पर स्विच करें`,
+    paintSwitchSave: (amount) => `और इस काम पर ${amount} बचाएँ`,
+    paintSwitchCta: "स्विच करें",
     paintPricesIndicative:
       "अन्य ब्रांड की कीमतें अनुमानित MRP हैं, केवल संकेत के लिए। अंतिम कीमत WhatsApp पर तय होगी",
     paintWhyThisPick: "यह क्यों चुनें",
@@ -595,6 +604,9 @@ export const dictionaries: Record<Language, Dictionary> = {
     paintChooseYourPaint: "ਆਪਣਾ ਪੇਂਟ ਚੁਣੋ",
     paintRecommended: "ਸਿਫ਼ਾਰਸ਼ੀ",
     paintOtherBrands: "ਹੋਰ ਬ੍ਰਾਂਡ",
+    paintSwitchTitle: (name) => `${name} ਉੱਤੇ ਸਵਿਚ ਕਰੋ`,
+    paintSwitchSave: (amount) => `ਅਤੇ ਇਸ ਕੰਮ ਉੱਤੇ ${amount} ਬਚਾਓ`,
+    paintSwitchCta: "ਸਵਿਚ ਕਰੋ",
     paintPricesIndicative:
       "ਹੋਰ ਬ੍ਰਾਂਡਾਂ ਦੀਆਂ ਕੀਮਤਾਂ ਅਨੁਮਾਨਿਤ MRP ਹਨ, ਸਿਰਫ਼ ਸੰਕੇਤ ਲਈ। ਅੰਤਿਮ ਕੀਮਤ WhatsApp ਉੱਤੇ ਤੈਅ ਹੋਵੇਗੀ",
     paintWhyThisPick: "ਇਹ ਕਿਉਂ ਚੁਣੋ",

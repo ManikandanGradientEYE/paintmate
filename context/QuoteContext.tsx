@@ -148,6 +148,8 @@ interface QuoteContextValue {
   selectedPaint: Paint;
   selectedShade: Shade | null;
   estimate: EstimateBreakdown;
+  /** set when a Jiwan paint would do the same job for less than the chosen one */
+  jiwanSwitch: { paint: Paint; saving: number } | null;
   isInLudhiana: boolean;
   availablePaints: { recommended: Paint[]; other: Paint[] };
   homeSizes: HomeSize[];
@@ -206,6 +208,38 @@ export function QuoteProvider({
       isInLudhiana,
       settings: siteData.pricingSettings,
     });
+
+    // Nudge towards Jiwan when another brand is picked: price the same job with a
+    // cheaper Jiwan paint and offer the difference. Staying inside the same tier
+    // matters — otherwise a Premium choice gets answered with a Value tin and the
+    // "saving" is really a downgrade. Within the tier, cheapest wins.
+    function findJiwanSwitch(): { paint: Paint; saving: number } | null {
+      if (selectedPaint.isJiwan) return null;
+      const cheaper = siteData.paints
+        .filter(
+          (p) =>
+            p.isJiwan &&
+            p.surfaces.includes(state.surface) &&
+            p.pricePerLitre < selectedPaint.pricePerLitre
+        )
+        .sort((a, b) => a.pricePerLitre - b.pricePerLitre);
+      const sameTier = cheaper.filter((p) => p.tier === selectedPaint.tier);
+      const alternative = (sameTier.length > 0 ? sameTier : cheaper)[0];
+      if (!alternative) return null;
+
+      const withAlternative = calculateEstimate({
+        areaSqft: state.areaSqft,
+        coats: state.coats,
+        paint: { pricePerLitre: alternative.pricePerLitre },
+        surface: state.surface,
+        addOns: { putty: state.addOns.putty, primer: state.addOns.primer },
+        painterCount: state.painterCount,
+        isInLudhiana,
+        settings: siteData.pricingSettings,
+      });
+      const saving = estimate.total - withAlternative.total;
+      return saving > 0 ? { paint: alternative, saving } : null;
+    }
 
     const recommended = siteData.paints.filter(
       (p) => p.isJiwan && p.surfaces.includes(state.surface)
@@ -272,6 +306,7 @@ export function QuoteProvider({
       selectedPaint,
       selectedShade,
       estimate,
+      jiwanSwitch: findJiwanSwitch(),
       isInLudhiana,
       availablePaints: { recommended, other },
       homeSizes: siteData.homeSizes,
