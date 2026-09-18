@@ -105,7 +105,7 @@ export interface Dictionary {
   paintChooseYourPaint: string;
   paintRecommended: string;
   paintOtherBrands: string;
-  paintSwitchTitle: (name: string) => string;
+  paintSwitchTitle: (brand: string, name: string) => string;
   paintSwitchSave: (amount: string) => string;
   paintSwitchCta: string;
   paintPricesIndicative: string;
@@ -273,7 +273,7 @@ export const dictionaries: Record<Language, Dictionary> = {
     paintChooseYourPaint: "Choose your paint",
     paintRecommended: "Recommended",
     paintOtherBrands: "Other Brands",
-    paintSwitchTitle: (name) => `Switch to ${name}`,
+    paintSwitchTitle: (brand, name) => `Switch to ${brand} ${name}`,
     paintSwitchSave: (amount) => `and save ${amount} on this job`,
     paintSwitchCta: "Switch",
     paintPricesIndicative:
@@ -438,7 +438,7 @@ export const dictionaries: Record<Language, Dictionary> = {
     paintChooseYourPaint: "अपना पेंट चुनें",
     paintRecommended: "अनुशंसित",
     paintOtherBrands: "अन्य ब्रांड",
-    paintSwitchTitle: (name) => `${name} पर स्विच करें`,
+    paintSwitchTitle: (brand, name) => `${brand} ${name} पर स्विच करें`,
     paintSwitchSave: (amount) => `और इस काम पर ${amount} बचाएँ`,
     paintSwitchCta: "स्विच करें",
     paintPricesIndicative:
@@ -604,7 +604,7 @@ export const dictionaries: Record<Language, Dictionary> = {
     paintChooseYourPaint: "ਆਪਣਾ ਪੇਂਟ ਚੁਣੋ",
     paintRecommended: "ਸਿਫ਼ਾਰਸ਼ੀ",
     paintOtherBrands: "ਹੋਰ ਬ੍ਰਾਂਡ",
-    paintSwitchTitle: (name) => `${name} ਉੱਤੇ ਸਵਿਚ ਕਰੋ`,
+    paintSwitchTitle: (brand, name) => `${brand} ${name} ਉੱਤੇ ਸਵਿਚ ਕਰੋ`,
     paintSwitchSave: (amount) => `ਅਤੇ ਇਸ ਕੰਮ ਉੱਤੇ ${amount} ਬਚਾਓ`,
     paintSwitchCta: "ਸਵਿਚ ਕਰੋ",
     paintPricesIndicative:

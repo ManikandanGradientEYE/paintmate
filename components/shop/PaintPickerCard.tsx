@@ -130,7 +130,7 @@ export default function PaintPickerCard() {
         <div className="mt-4 flex items-center gap-3 rounded-xl border-[1.5px] border-lime bg-pale px-4 py-3.5 lg:gap-5 lg:px-5 lg:py-4">
           <span className="min-w-0 flex-1">
             <span className="block text-[15px] font-extrabold leading-tight lg:text-[18px]">
-              {t.paintSwitchTitle(jiwanSwitch.paint.name)}
+              {t.paintSwitchTitle(jiwanSwitch.paint.brand, jiwanSwitch.paint.name)}
             </span>
             <span className="mt-1 block text-[13.5px] leading-[1.35] lg:text-[15px]">
               {t.paintSwitchSave(formatINR(jiwanSwitch.saving))}
