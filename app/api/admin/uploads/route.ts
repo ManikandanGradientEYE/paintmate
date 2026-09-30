@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+import { BLOB_TOKEN } from "@/lib/uploads";
 
 export const dynamic = "force-dynamic";
 
@@ -20,14 +21,9 @@ export async function POST(request: NextRequest) {
   if (file.size > MAX_BYTES) {
     return NextResponse.json({ error: "Image is too large (max 4 MB)" }, { status: 400 });
   }
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return NextResponse.json(
-      { error: "Image uploads aren't set up: BLOB_READ_WRITE_TOKEN is missing" },
-      { status: 500 }
-    );
-  }
   try {
     const blob = await put(`uploads/${file.name}`, file, {
+      token: BLOB_TOKEN,
       access: "public",
       contentType: file.type,
       addRandomSuffix: true,
