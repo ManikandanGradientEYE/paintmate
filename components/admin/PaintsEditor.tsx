@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { adminFetch } from "@/lib/adminFetch";
 import PaintThumb from "@/components/ui/PaintThumb";
+import ImageUpload from "@/components/admin/ImageUpload";
 import { Paint, Surface, Tier } from "@/types";
 
 type Draft = {
@@ -68,12 +69,20 @@ function PaintForm({
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
       <div className="flex items-center gap-2 sm:col-span-2">
         <PaintThumb src={draft.imageUrl} alt={draft.name || "Paint"} size={40} />
-        <input
-          value={draft.imageUrl}
-          onChange={(e) => onChange({ imageUrl: e.target.value })}
-          placeholder="Image URL (optional)"
-          className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-forest"
+        <ImageUpload
+          maxSide={400}
+          label={draft.imageUrl ? "Change image" : "Upload image (optional)"}
+          onUploaded={(url) => onChange({ imageUrl: url })}
         />
+        {draft.imageUrl && (
+          <button
+            type="button"
+            onClick={() => onChange({ imageUrl: "" })}
+            className="text-xs font-bold text-[#C2410C]"
+          >
+            Remove
+          </button>
+        )}
       </div>
       <input
         value={draft.name}

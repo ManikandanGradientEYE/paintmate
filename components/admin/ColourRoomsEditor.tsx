@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { adminFetch } from "@/lib/adminFetch";
+import ImageUpload from "@/components/admin/ImageUpload";
 import { ColourRoom, ColourSwatch } from "@/types";
 
 const NEW_HEX = "#CFBCC3";
@@ -50,7 +51,7 @@ export default function ColourRoomsEditor({
 
   async function addRoom() {
     if (!newRoom.name.trim() || !newRoom.imageUrl.trim()) {
-      setError("A new room needs both a name and a transparent PNG URL.");
+      setError("A new room needs both a name and an uploaded transparent PNG.");
       return;
     }
     setBusy("new-room");
@@ -161,17 +162,16 @@ export default function ColourRoomsEditor({
                   />
 
                   <label className="mt-3 block text-xs font-bold text-ink-muted">
-                    Transparent PNG URL
+                    Transparent PNG
                   </label>
-                  <input
-                    value={draft.imageUrl}
-                    onChange={(e) => patchRoom(room.id, { imageUrl: e.target.value })}
-                    placeholder="https://…/living-room.png"
-                    className={`${inputClass} mt-1 w-full`}
+                  <ImageUpload
+                    className="mt-1"
+                    label="Upload new image"
+                    onUploaded={(url) => patchRoom(room.id, { imageUrl: url })}
                   />
                   <p className="mt-1 text-xs text-ink-muted">
                     The wall area must be transparent — the selected colour is painted
-                    behind it.
+                    behind it. Click Save room to apply a new image.
                   </p>
 
                   <div className="mt-3 flex gap-2">
@@ -266,11 +266,17 @@ export default function ColourRoomsEditor({
             placeholder="Room name (e.g. Balcony)"
             className={`${inputClass} w-[220px]`}
           />
-          <input
-            value={newRoom.imageUrl}
-            onChange={(e) => setNewRoom({ ...newRoom, imageUrl: e.target.value })}
-            placeholder="Transparent PNG URL"
-            className={`${inputClass} min-w-[220px] flex-1`}
+          {newRoom.imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={newRoom.imageUrl}
+              alt=""
+              className="h-10 w-14 rounded-lg border border-line bg-pale object-cover"
+            />
+          )}
+          <ImageUpload
+            label={newRoom.imageUrl ? "Change PNG" : "Upload transparent PNG"}
+            onUploaded={(url) => setNewRoom({ ...newRoom, imageUrl: url })}
           />
           <button
             type="button"

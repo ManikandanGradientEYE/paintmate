@@ -72,6 +72,9 @@ an existing unrelated repo for this.
   Variables), same four as your `.env`/`.env.local`: `DATABASE_URL`, `DIRECT_URL`,
   `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`. Use a different, strong `ADMIN_PASSWORD`
   from any local testing value.
+- For admin image uploads: Storage → Create → **Blob**, and connect it to this
+  project. That adds `BLOB_READ_WRITE_TOKEN` automatically; copy it into `.env.local`
+  too if you want uploads to work in local dev.
 - Deploy. Vercel runs `npm install` (which triggers `prisma generate` via the
   `postinstall` script) then `next build`.
 
