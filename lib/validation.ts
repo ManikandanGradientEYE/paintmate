@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SOCIAL_PLATFORMS } from "@/types";
+import { SHADE_CATEGORIES, SOCIAL_PLATFORMS } from "@/types";
 
 export const leadSubmissionSchema = z.object({
   name: z.string().trim().min(2, "Enter your full name").max(120),
@@ -54,7 +54,7 @@ export const paintSchema = z.object({
 export const shadeSchema = z.object({
   code: z.string().trim().min(1).max(20),
   hex: z.string().trim().regex(/^#[0-9A-Fa-f]{6}$/, "Use a hex colour like #8FA23A"),
-  category: z.enum(["greens", "browns", "greys"]),
+  category: z.enum(SHADE_CATEGORIES),
   sortOrder: z.number().int().optional().default(0),
 });
 

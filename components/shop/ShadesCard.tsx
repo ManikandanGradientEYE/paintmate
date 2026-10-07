@@ -7,9 +7,22 @@ import { useQuote } from "@/context/QuoteContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { readableTextColor } from "@/lib/color";
 
-/** A representative dot colour for a category tab, taken from its first shade. */
-function categoryDot(hexes: string[]): string {
-  return hexes[0] ?? "#DDD";
+/** The swatch shown on each family tab, from the shade card's family swatches. */
+const FAMILY_DOTS: Record<string, string> = {
+  whites: "#D7D2D6",
+  yellows: "#EDEF60",
+  oranges: "#F3E8CF",
+  pinks: "#CBBCC3",
+  purples: "#C79FD6",
+  blues: "#6A83CB",
+  greens: "#D6E0A8",
+  browns: "#7A6F5E",
+  greys: "#5F686D",
+};
+
+/** A representative dot colour for a category tab: its family swatch, else its first shade. */
+function categoryDot(category: string, hexes: string[]): string {
+  return FAMILY_DOTS[category] ?? hexes[0] ?? "#DDD";
 }
 
 export default function ShadesCard() {
@@ -41,6 +54,7 @@ export default function ShadesCard() {
         {shadeCategories.map((cat) => {
           const active = state.shadeCategory === cat;
           const dot = categoryDot(
+            cat,
             shades.filter((s) => s.category === cat).map((s) => s.hex)
           );
           return (

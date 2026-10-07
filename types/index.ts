@@ -1,7 +1,20 @@
 export type Surface = "interior" | "exterior";
 export type Tier = "Value" | "Premium";
 export type Coats = 1 | 2 | 3;
-export type ShadeCategory = "greens" | "browns" | "greys";
+/** Shade families, in the order the shop's tabs and the admin dropdown list them.
+ * The shop only shows a tab for a family that has shades. */
+export const SHADE_CATEGORIES = [
+  "whites",
+  "yellows",
+  "oranges",
+  "pinks",
+  "purples",
+  "blues",
+  "greens",
+  "browns",
+  "greys",
+] as const;
+export type ShadeCategory = (typeof SHADE_CATEGORIES)[number];
 export type AddOnSlug = "putty" | "primer" | "painter";
 export type LeadStatus = "new" | "contacted" | "quoted" | "won" | "lost";
 

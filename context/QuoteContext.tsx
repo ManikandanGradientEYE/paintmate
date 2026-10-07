@@ -10,6 +10,7 @@ import {
   HomeSize,
   Paint,
   PricingSettings,
+  SHADE_CATEGORIES,
   Shade,
   SiteData,
   Surface,
@@ -248,8 +249,10 @@ export function QuoteProvider({
       (p) => !p.isJiwan && p.surfaces.includes(state.surface)
     );
 
-    // shade tabs come from whatever categories exist in the database
-    const shadeCategories = Array.from(new Set(siteData.shades.map((s) => s.category)));
+    // shade tabs come from whatever categories exist in the database, in SHADE_CATEGORIES order
+    const shadeCategories = SHADE_CATEGORIES.filter((cat) =>
+      siteData.shades.some((s) => s.category === cat)
+    );
     const visibleShades = state.shadeCategory
       ? siteData.shades.filter((s) => s.category === state.shadeCategory)
       : siteData.shades;

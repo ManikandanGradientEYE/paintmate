@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { adminFetch } from "@/lib/adminFetch";
-import { Shade, ShadeCategory } from "@/types";
+import { SHADE_CATEGORIES, Shade, ShadeCategory } from "@/types";
 
 type Draft = { code: string; hex: string; category: ShadeCategory; sortOrder: number };
 
@@ -11,7 +11,7 @@ function toDraft(item: Shade): Draft {
 }
 
 const EMPTY_DRAFT: Draft = { code: "", hex: "#8FA23A", category: "greens", sortOrder: 0 };
-const CATEGORIES: ShadeCategory[] = ["greens", "browns", "greys"];
+const CATEGORIES = SHADE_CATEGORIES;
 
 export default function ShadesEditor({ initialItems }: { initialItems: Shade[] }) {
   const [items, setItems] = useState(initialItems);
