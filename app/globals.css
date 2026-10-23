@@ -203,9 +203,13 @@ body {
     display: flex;
     gap: 14px;
     overflow-x: auto;
+    /* Tilted cards and their shadows poke a few px past the row. Left as auto, that
+       makes the row scroll vertically too, and iOS Safari (unlike Chrome) doesn't lock
+       the swipe to one axis, so it wobbles and fights the page scroll. */
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--pad);
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
   .hscroll::-webkit-scrollbar {
@@ -214,6 +218,14 @@ body {
   .hscroll > * {
     scroll-snap-align: start;
     flex: 0 0 auto;
+    /* own compositing layer, so Safari moves the rotated, shadowed cards instead of
+       repainting them every frame */
+    will-change: transform;
+  }
+  /* the last card can never reach the start line; letting it snap to the end stops
+     Safari bouncing back from the end of the row */
+  .hscroll > *:last-child {
+    scroll-snap-align: end;
   }
 
   .thin-scroll::-webkit-scrollbar {
