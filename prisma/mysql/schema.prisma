@@ -1,0 +1,149 @@
+// Transition only: generated into prisma/mysql/client so scripts/neon-to-mysql.ts can
+// hold a Postgres and a MySQL client at once. Remove `output` when this schema
+// replaces prisma/schema.prisma.
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MYSQL_DATABASE_URL")
+}
+
+model HomeSize {
+  id        String @id @default(cuid())
+  label     String
+  sublabel  String
+  sqft      Int
+  sortOrder Int    @default(0)
+}
+
+model Paint {
+  id             String  @id @default(cuid())
+  name           String
+  brand          String
+  pricePerLitre  Float
+  tier           String
+  recommended    Boolean @default(false)
+  isJiwan        Boolean @default(false)
+  approxPrice    Boolean @default(false)
+  // Comma-separated surfaces, e.g. "interior,exterior" — kept as a plain string
+  // (rather than a native list type) so lib/mappers.ts works unchanged
+  // if this ever moves to a provider without list support again.
+  surfaces       String
+  whyPick        String? @db.Text
+  imageUrl       String? @db.Text
+  sortOrder      Int     @default(0)
+}
+
+model Shade {
+  id        String @id @default(cuid())
+  code      String @unique
+  hex       String
+  category  String
+  sortOrder Int    @default(0)
+}
+
+model AddOn {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  label     String
+  defaultOn Boolean @default(false)
+  priced    Boolean @default(false)
+  sortOrder Int     @default(0)
+}
+
+model CatalogProduct {
+  id            String @id @default(cuid())
+  categoryLabel String
+  name          String
+  description   String @db.Text
+  swatch        String
+  cta           String
+  sortOrder     Int    @default(0)
+}
+
+model PricingSetting {
+  id                                String @id @default("singleton")
+  paintCoverageSqftPerLitrePerCoat  Float  @default(133.33)
+  primerCoverageSqftPerLitre        Float  @default(125)
+  primerPriceInterior               Float  @default(70)
+  primerPriceExterior               Float  @default(85)
+  gstRate                           Float  @default(0.18)
+  deliveryFeeLudhiana               Float  @default(99)
+  estimateRangePct                  Float  @default(0.06)
+  puttyBagKg                        Float  @default(30)
+  puttyPricePerBag                  Float  @default(515)
+  puttyCoverageSqftPerKg            Float  @default(11.11)
+  /// Painter labour, charged on wall area rather than per head. Applied when the
+  /// customer adds at least one painter; the head count does not change the price.
+  painterRatePerSqft                Float  @default(7)
+}
+
+model Lead {
+  id                 String   @id @default(cuid())
+  name               String
+  phone              String
+  locality           String?
+  homeSizeLabel      String?
+  areaSqft           Int
+  surface            String
+  coats              Int
+  paintName          String
+  paintBrand         String
+  paintPricePerLitre Float
+  addOnPutty         Boolean
+  addOnPrimer        Boolean
+  addOnPainter       Boolean
+  addOnPainterCount  Int      @default(0)
+  shadeCode          String?
+  customShadeBrand   String?
+  customShadeCode    String?
+  customShadeNote    String? @db.Text
+  estimateTotal      Float
+  estimateRangeLow   Float
+  estimateRangeHigh  Float
+  status             String   @default("new")
+  notes              String? @db.Text
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+/// A room tab in the "Get the experience of colour" section on the home page.
+/// imageUrl is a transparent-background PNG of the room; the selected swatch colour
+/// is painted behind it, so the wall shows through in that shade.
+model ColourRoom {
+  id        String         @id @default(cuid())
+  name      String
+  imageUrl  String @db.Text
+  sortOrder Int            @default(0)
+  swatches  ColourSwatch[]
+}
+
+/// One selectable colour for a room. No image of its own — it tints the room PNG.
+model ColourSwatch {
+  id        String     @id @default(cuid())
+  roomId    String
+  room      ColourRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  hex       String
+  sortOrder Int        @default(0)
+}
+
+/// A customer testimonial in "Know from our customers" on the home page.
+model Review {
+  id        String @id @default(cuid())
+  body      String @db.Text
+  name      String
+  role      String
+  sortOrder Int    @default(0)
+}
+
+/// One icon in the footer's "Connect with us" row. `platform` picks the icon and must
+/// be one of the keys the footer knows; anything else falls back to a link glyph.
+model SocialLink {
+  id        String @id @default(cuid())
+  platform  String
+  url       String @db.Text
+  sortOrder Int    @default(0)
+}

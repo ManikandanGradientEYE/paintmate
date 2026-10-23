@@ -96,100 +96,76 @@ function StepCard({ step, index }: { step: Step; index: number }) {
   );
 }
 
-/** Height of the sticky header the pinned panel has to clear, on mobile. */
-const HEADER_H = 86;
-/** How much page scroll each step is given while the panel is pinned. */
-const SCROLL_PER_STEP_VH = 75;
+/** The row's scroll position that brings card `i` to where the first card starts. */
+function cardScroll(row: HTMLElement, i: number) {
+  const cards = row.children as HTMLCollectionOf<HTMLElement>;
+  return (cards[i]?.offsetLeft ?? 0) - (cards[0]?.offsetLeft ?? 0);
+}
 
 /**
- * Mobile only: one card at a time, changed by the page's own scroll.
- *
- * The section pins itself for a few screens' worth of scrolling and the cards swipe
- * through that slot as you go, so the four steps are read in order instead of all at
- * once. Desktop lays the same cards out in a grid and leaves scrolling alone.
+ * Mobile only: the four cards in a swipeable row, with dots that follow the swipe
+ * and jump to a step when tapped. Desktop lays the same cards out in a grid.
  */
-function ScrollSteps({ steps, title, lead }: { steps: Step[]; title: string; lead: string }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+function SwipeSteps({ steps }: { steps: Step[] }) {
+  const rowRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    const track = trackRef.current;
-    const panel = panelRef.current;
-    if (!track || !panel) return;
+    const row = rowRef.current;
+    if (!row) return;
 
     let frame = 0;
     const read = () => {
       frame = 0;
-      const rect = track.getBoundingClientRect();
-      // how far the panel can travel inside the track before it unpins
-      const travel = rect.height - panel.offsetHeight;
-      if (travel <= 0) return;
-      const passed = Math.min(Math.max(HEADER_H - rect.top, 0), travel);
-      const index = Math.min(steps.length - 1, Math.floor((passed / travel) * steps.length));
-      setActive(index);
+      const cards = Array.from(row.children) as HTMLElement[];
+      // the card that sits closest to where the first one starts
+      const distance = (i: number) => Math.abs(cardScroll(row, i) - row.scrollLeft);
+      let closest = 0;
+      cards.forEach((_, i) => {
+        if (distance(i) < distance(closest)) closest = i;
+      });
+      // the last card can't scroll to the snap line, so treat "scrolled to the end" as it
+      if (row.scrollLeft + row.clientWidth >= row.scrollWidth - 4) closest = cards.length - 1;
+      setActive(closest);
     };
     const onScroll = () => {
       if (frame) return;
       frame = window.requestAnimationFrame(read);
     };
 
-    read();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    row.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      row.removeEventListener("scroll", onScroll);
     };
-  }, [steps.length]);
+  }, []);
+
+  const goTo = (i: number) => {
+    const row = rowRef.current;
+    if (row) row.scrollTo({ left: cardScroll(row, i), behavior: "smooth" });
+  };
 
   return (
-    <div
-      ref={trackRef}
-      className="relative lg:hidden"
-      style={{ height: `calc(${steps.length} * ${SCROLL_PER_STEP_VH}svh)` }}
-    >
-      <div
-        ref={panelRef}
-        className="sticky flex h-[calc(100svh-86px)] flex-col justify-center"
-        style={{ top: `${HEADER_H}px` }}
-      >
-        <h2 className="display sec-title relative">{title}</h2>
-        <p className="relative mt-2 text-center text-base">{lead}</p>
+    <div className="lg:hidden">
+      <div ref={rowRef} className="hscroll relative -mx-4 px-4 py-2">
+        {steps.map((step, i) => (
+          <StepCard key={step.num} step={step} index={i} />
+        ))}
+      </div>
 
-        <div className="relative mt-7 h-[340px]">
-          {steps.map((step, i) => (
-            <div
-              key={step.num}
-              aria-hidden={i !== active}
-              className={`absolute inset-x-0 top-0 flex justify-center transition-[transform,opacity] duration-500 ease-out motion-reduce:transition-none ${
-                i === active
-                  ? "translate-x-0 opacity-100"
-                  : i < active
-                    ? "pointer-events-none -translate-x-[120%] opacity-0"
-                    : "pointer-events-none translate-x-[120%] opacity-0"
-              }`}
-            >
-              <StepCard step={step} index={i} />
-            </div>
-          ))}
-        </div>
-
-        <div className="relative mt-1 flex justify-center gap-2" aria-hidden="true">
-          {steps.map((step, i) => (
-            <span
-              key={step.num}
-              className={`h-1.5 rounded-pill transition-all duration-300 ${
-                i === active ? "w-6 bg-forest" : "w-1.5 bg-forest/25"
-              }`}
-            />
-          ))}
-        </div>
-
-        <div className="relative mt-8 text-center">
-          <QuoteButton />
-        </div>
+      <div className="relative mt-3 flex justify-center gap-2">
+        {steps.map((step, i) => (
+          <button
+            key={step.num}
+            type="button"
+            onClick={() => goTo(i)}
+            aria-label={`${step.num} ${step.label}`}
+            aria-current={i === active ? "step" : undefined}
+            className={`h-1.5 rounded-pill transition-all duration-300 ${
+              i === active ? "w-6 bg-forest" : "w-1.5 bg-forest/25"
+            }`}
+          />
+        ))}
       </div>
     </div>
   );
@@ -218,29 +194,27 @@ export default function Journey() {
   ];
 
   return (
-    // No overflow-hidden on the section itself: it would make this a scroll container
-    // and the pinned panel inside would never stick. The blob gets its own clipper.
     <section className="frame relative px-4 pt-[46px] lg:px-[var(--pad)] lg:pt-[200px]">
       <span
         aria-hidden="true"
         className="blob pointer-events-none absolute inset-0 overflow-hidden [&::before]:bottom-20 [&::before]:right-[-70px] [&::before]:h-[300px] [&::before]:w-[210px] [&::before]:opacity-70 lg:[&::before]:bottom-[180px] lg:[&::before]:right-0 lg:[&::before]:h-[560px] lg:[&::before]:w-[430px] lg:[&::before]:opacity-50"
       />
 
-      <ScrollSteps steps={steps} title={t.journeyTitle} lead={t.journeyLead} />
+      <h2 className="display sec-title relative">{t.journeyTitle}</h2>
+      <p className="relative mb-5 mt-2 text-center text-base lg:mb-11 lg:mt-3 lg:text-[22px]">
+        {t.journeyLead}
+      </p>
 
-      <div className="hidden lg:block">
-        <h2 className="display sec-title relative">{t.journeyTitle}</h2>
-        <p className="relative mb-11 mt-3 text-center text-[22px]">{t.journeyLead}</p>
+      <SwipeSteps steps={steps} />
 
-        <div className="relative grid grid-cols-2 gap-10">
-          {steps.map((step, i) => (
-            <StepCard key={step.num} step={step} index={i} />
-          ))}
-        </div>
+      <div className="relative hidden grid-cols-2 gap-10 lg:grid">
+        {steps.map((step, i) => (
+          <StepCard key={step.num} step={step} index={i} />
+        ))}
+      </div>
 
-        <div className="relative mt-20 text-center">
-          <QuoteButton />
-        </div>
+      <div className="relative mt-8 text-center lg:mt-20">
+        <QuoteButton />
       </div>
     </section>
   );
