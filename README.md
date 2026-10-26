@@ -1,95 +1,55 @@
 # Paint Mate — quotation calculator + admin
 
-Next.js + TypeScript + Tailwind + Prisma/PostgreSQL build of Paint Mate (a Jiwan Group
+Next.js + TypeScript + Tailwind + Prisma/MySQL build of Paint Mate (a Jiwan Group
 Venture): a marketing home page at `/`, the Paint Shop estimator at `/shop`, and a staff
-admin panel at `/admin`. Hosted on **Vercel** with a **Neon** Postgres database.
+admin panel at `/admin`. Hosted on **Hostinger** (Node.js app) with a **Hostinger MySQL**
+database.
 
 ## Run locally
 
 ```bash
 npm install
 cp .env.example .env.local   # fill in ADMIN_PASSWORD and ADMIN_SESSION_SECRET
-# then edit .env directly with your Neon DATABASE_URL / DIRECT_URL (see below)
-npm run db:migrate           # applies the schema to your Neon database
-npm run db:seed              # loads data/*.ts into it
+# then edit .env directly with the Hostinger DATABASE_URL (see below)
 npm run dev
 ```
 
 Open http://localhost:3000 for the customer site, http://localhost:3000/admin/login
 for staff (password from `ADMIN_PASSWORD` in `.env.local`).
 
-Local dev and production point at the **same Neon database** by design (no local
-Postgres to install, and only one schema to keep in sync) — see the deployment guide
-below for creating it.
+Local dev and production point at the **same MySQL database** by design (only one
+schema to keep in sync) — so anything you do locally, including test leads and admin
+edits, happens on the live data.
 
 ## Database
 
-PostgreSQL, hosted on Neon (free tier). Vercel's serverless functions have no
-persistent disk, so this can't be SQLite — every request may run on a fresh instance
-with an empty filesystem. Neon gives two connection strings: `DATABASE_URL` (pooled,
-via PgBouncer — used for normal queries so many concurrent serverless invocations don't
-exhaust Postgres's connection limit) and `DIRECT_URL` (unpooled — used only for running
-migrations). Both go in `prisma/schema.prisma`'s datasource block already.
+MySQL on Hostinger (hPanel → Databases → Management). Prisma's CLI reads
+`DATABASE_URL` from `.env` (not `.env.local`); URL-encode special characters in the
+password (`@` → `%40`). To connect from your PC, your IP must be allowed under hPanel →
+Databases → **Remote MySQL**; the Hostinger-hosted app itself connects without that.
 
-## Deploying (Vercel + Neon)
+Until October 2026 the data lived in Neon Postgres; it was copied over with
+`scripts/neon-to-mysql.ts` (see the comment at its top). `prisma/neon/` and
+`NEON_DATABASE_URL` exist only for that transfer and can be deleted once Neon is retired.
 
-**1. Create the Neon database**
-- Sign up at [neon.tech](https://neon.tech) (free tier is enough for this).
-- Create a project. Neon gives you a default database immediately.
-- Open **Connection Details** — copy the **pooled** connection string (host contains
-  `-pooler`) and the **direct** connection string (no `-pooler`).
+## Deploying (Hostinger Node.js app — Business or Cloud plan)
 
-**2. Configure this repo locally**
-- `cp .env.example .env.local`, then set `ADMIN_PASSWORD` and `ADMIN_SESSION_SECRET`
-  to real values (not the placeholders).
-- Edit `.env` directly (Prisma's CLI reads this file, not `.env.local`) and paste in
-  `DATABASE_URL` (pooled) and `DIRECT_URL` (direct) from Neon. Both files are
-  gitignored — nothing here gets committed.
-- Run `npm run db:migrate` — this creates the tables in Neon and writes a fresh
-  migration under `prisma/migrations/` (there's no migration history yet since this
-  project switched from SQLite).
-- Run `npm run db:seed` to load the starting products/shades/pricing.
-- Commit the new `prisma/migrations/` folder — migrations are code and belong in git,
-  unlike `.env`.
+1. Zip the project **without** `node_modules/`, `.next/`, `.git/`, `.env*`, `backup/`
+   and `UI_UX_changes/` (e.g. `git archive` of the app folders).
+2. hPanel → Websites → Add website → **Node.js Apps** → upload the zip.
+3. Framework **Next.js**, Node **20.x**, build `npm run build`, start `npm run start`.
+   `npm install` runs `prisma generate` via the `postinstall` script.
+4. Environment variables: `DATABASE_URL`, `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`.
+   On Hostinger, `localhost` also works as the MySQL host in `DATABASE_URL`.
+5. Deploy, connect the domain, then verify: storefront loads, `/admin/login` works, a
+   test quote shows up in `/admin/leads`.
 
-**3. Push to GitHub**
-
-This project currently isn't its own git repository — set one up:
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-```
-Then create a new (empty) repository on GitHub and push to it — either via the GitHub
-website ("New repository") or `gh repo create` if you have the GitHub CLI. Don't reuse
-an existing unrelated repo for this.
-
-**4. Import into Vercel**
-- Sign up / log in at [vercel.com](https://vercel.com) with your GitHub account.
-- "Add New Project" → import the `paintmate` repo.
-- Framework preset auto-detects Next.js — leave build settings as default.
-- Before deploying, add **Environment Variables** (Project Settings → Environment
-  Variables), same four as your `.env`/`.env.local`: `DATABASE_URL`, `DIRECT_URL`,
-  `ADMIN_PASSWORD`, `ADMIN_SESSION_SECRET`. Use a different, strong `ADMIN_PASSWORD`
-  from any local testing value.
-- Admin image uploads go to Vercel Blob; the store's token is set in `lib/uploads.ts`.
-- Deploy. Vercel runs `npm install` (which triggers `prisma generate` via the
-  `postinstall` script) then `next build`.
-
-**5. Verify**
-- Visit the Vercel-assigned URL — the storefront should load with your seeded data.
-- Visit `/admin/login` and sign in with the production `ADMIN_PASSWORD`.
-- Submit a test quote on the storefront, confirm it shows up in `/admin/leads`.
-
-**6. Custom domain (optional)**
-- Project Settings → Domains → add yours, and update DNS at your registrar as Vercel
-  instructs (usually a CNAME or A record). HTTPS is automatic.
+Admin image uploads go to Vercel Blob; the store's token is set in `lib/uploads.ts`.
 
 **Ongoing changes**: whenever you change `prisma/schema.prisma`, run
-`npm run db:migrate` locally (against the same Neon database) to create and apply the
-migration, commit the migration folder, then push — Vercel redeploys automatically on
-every push to the connected branch. There's no separate "deploy migration" step because
-local dev and production share one database.
+`npm run db:migrate` locally (against the same MySQL database) to create and apply the
+migration, commit the migration folder, then upload the new build. There's no separate
+"deploy migration" step because local dev and production share one database.
 
 ## What's configurable from /admin
 

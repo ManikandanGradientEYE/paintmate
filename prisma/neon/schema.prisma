@@ -1,14 +1,14 @@
-// Transition only: generated into prisma/mysql/client so scripts/neon-to-mysql.ts can
-// hold a Postgres and a MySQL client at once. Remove `output` when this schema
-// replaces prisma/schema.prisma.
+// Transition only: the old Neon Postgres database, generated into prisma/neon/client so
+// scripts/neon-to-mysql.ts can read it alongside the main (MySQL) client. Delete this
+// folder once Hostinger is live and Neon is retired.
 generator client {
   provider = "prisma-client-js"
   output   = "./client"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("MYSQL_DATABASE_URL")
+  provider = "postgresql"
+  url      = env("NEON_DATABASE_URL")
 }
 
 model HomeSize {
@@ -29,11 +29,11 @@ model Paint {
   isJiwan        Boolean @default(false)
   approxPrice    Boolean @default(false)
   // Comma-separated surfaces, e.g. "interior,exterior" — kept as a plain string
-  // (rather than a native list type) so lib/mappers.ts works unchanged
+  // (rather than Postgres's native String[]) so lib/mappers.ts works unchanged
   // if this ever moves to a provider without list support again.
   surfaces       String
-  whyPick        String? @db.Text
-  imageUrl       String? @db.Text
+  whyPick        String?
+  imageUrl       String?
   sortOrder      Int     @default(0)
 }
 
@@ -58,7 +58,7 @@ model CatalogProduct {
   id            String @id @default(cuid())
   categoryLabel String
   name          String
-  description   String @db.Text
+  description   String
   swatch        String
   cta           String
   sortOrder     Int    @default(0)
@@ -100,12 +100,12 @@ model Lead {
   shadeCode          String?
   customShadeBrand   String?
   customShadeCode    String?
-  customShadeNote    String? @db.Text
+  customShadeNote    String?
   estimateTotal      Float
   estimateRangeLow   Float
   estimateRangeHigh  Float
   status             String   @default("new")
-  notes              String? @db.Text
+  notes              String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
@@ -116,7 +116,7 @@ model Lead {
 model ColourRoom {
   id        String         @id @default(cuid())
   name      String
-  imageUrl  String @db.Text
+  imageUrl  String
   sortOrder Int            @default(0)
   swatches  ColourSwatch[]
 }
@@ -133,7 +133,7 @@ model ColourSwatch {
 /// A customer testimonial in "Know from our customers" on the home page.
 model Review {
   id        String @id @default(cuid())
-  body      String @db.Text
+  body      String
   name      String
   role      String
   sortOrder Int    @default(0)
@@ -144,6 +144,6 @@ model Review {
 model SocialLink {
   id        String @id @default(cuid())
   platform  String
-  url       String @db.Text
+  url       String
   sortOrder Int    @default(0)
 }

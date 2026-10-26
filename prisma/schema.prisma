@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model HomeSize {
@@ -26,11 +25,11 @@ model Paint {
   isJiwan        Boolean @default(false)
   approxPrice    Boolean @default(false)
   // Comma-separated surfaces, e.g. "interior,exterior" — kept as a plain string
-  // (rather than Postgres's native String[]) so lib/mappers.ts works unchanged
+  // (rather than a native list type) so lib/mappers.ts works unchanged
   // if this ever moves to a provider without list support again.
   surfaces       String
-  whyPick        String?
-  imageUrl       String?
+  whyPick        String? @db.Text
+  imageUrl       String? @db.Text
   sortOrder      Int     @default(0)
 }
 
@@ -55,7 +54,7 @@ model CatalogProduct {
   id            String @id @default(cuid())
   categoryLabel String
   name          String
-  description   String
+  description   String @db.Text
   swatch        String
   cta           String
   sortOrder     Int    @default(0)
@@ -97,12 +96,12 @@ model Lead {
   shadeCode          String?
   customShadeBrand   String?
   customShadeCode    String?
-  customShadeNote    String?
+  customShadeNote    String? @db.Text
   estimateTotal      Float
   estimateRangeLow   Float
   estimateRangeHigh  Float
   status             String   @default("new")
-  notes              String?
+  notes              String? @db.Text
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
@@ -113,7 +112,7 @@ model Lead {
 model ColourRoom {
   id        String         @id @default(cuid())
   name      String
-  imageUrl  String
+  imageUrl  String @db.Text
   sortOrder Int            @default(0)
   swatches  ColourSwatch[]
 }
@@ -130,7 +129,7 @@ model ColourSwatch {
 /// A customer testimonial in "Know from our customers" on the home page.
 model Review {
   id        String @id @default(cuid())
-  body      String
+  body      String @db.Text
   name      String
   role      String
   sortOrder Int    @default(0)
@@ -141,6 +140,6 @@ model Review {
 model SocialLink {
   id        String @id @default(cuid())
   platform  String
-  url       String
+  url       String @db.Text
   sortOrder Int    @default(0)
 }

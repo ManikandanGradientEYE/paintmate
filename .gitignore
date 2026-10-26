@@ -14,4 +14,4 @@ next-env.d.ts
 
 # Neon -> MySQL transfer: data backups (contain customer leads) and the generated MySQL client
 /backup
-/prisma/mysql/client
+/prisma/neon/client

@@ -1,18 +1,24 @@
 /**
- * Copies every table from Neon Postgres (DATABASE_URL) into Hostinger MySQL
- * (MYSQL_DATABASE_URL), keeping ids so relations and links stay intact.
+ * Copies every table from Neon Postgres (NEON_DATABASE_URL) into Hostinger MySQL
+ * (DATABASE_URL), keeping ids so relations and links stay intact.
  *
- *   npx tsx scripts/neon-to-mysql.ts               export to backup/, then import
- *   npx tsx scripts/neon-to-mysql.ts --export-only just write the backup JSON
+ *   npx prisma generate --schema prisma/neon/schema.prisma   once, for the Neon client
+ *   npx tsx scripts/neon-to-mysql.ts --replace-mysql         export to backup/, then import
+ *   npx tsx scripts/neon-to-mysql.ts --export-only           just write the backup JSON
  *
- * The import replaces whatever is in MySQL, so it is safe to re-run just before
- * switching over to pick up leads that came in since the last run.
+ * The import REPLACES whatever is in MySQL. Re-run it just before switching over to
+ * pick up leads that came in on the old site — never after the Hostinger site is live,
+ * or leads and admin edits made there are wiped. Hence the explicit flag.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
-import { PrismaClient as PostgresClient } from "@prisma/client";
-import { PrismaClient as MysqlClient } from "../prisma/mysql/client";
+import { PrismaClient as PostgresClient } from "../prisma/neon/client";
+import { PrismaClient as MysqlClient } from "@prisma/client";
 
 const exportOnly = process.argv.includes("--export-only");
+if (!exportOnly && !process.argv.includes("--replace-mysql")) {
+  console.error("Refusing to overwrite MySQL without --replace-mysql (or use --export-only).");
+  process.exit(1);
+}
 
 const neon = new PostgresClient();
 const mysql = new MysqlClient();
