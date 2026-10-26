@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
-import { BLOB_TOKEN } from "@/lib/uploads";
+import { prisma } from "@/lib/prisma";
+import { uploadUrl } from "@/lib/uploads";
 
 export const dynamic = "force-dynamic";
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp"];
-// Vercel caps a function's request body at 4.5 MB; the admin UI resizes before
+// Images are stored in the database, so keep them small; the admin UI resizes before
 // uploading, so this is only a backstop.
 const MAX_BYTES = 4 * 1024 * 1024;
 
@@ -22,13 +22,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Image is too large (max 4 MB)" }, { status: 400 });
   }
   try {
-    const blob = await put(`uploads/${file.name}`, file, {
-      token: BLOB_TOKEN,
-      access: "public",
-      contentType: file.type,
-      addRandomSuffix: true,
+    const image = await prisma.uploadedImage.create({
+      data: { contentType: file.type, data: Buffer.from(await file.arrayBuffer()) },
+      select: { id: true },
     });
-    return NextResponse.json({ url: blob.url }, { status: 201 });
+    return NextResponse.json({ url: uploadUrl(image.id) }, { status: 201 });
   } catch (error) {
     console.error("Image upload failed", error);
     return NextResponse.json(

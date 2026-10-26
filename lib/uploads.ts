@@ -1,21 +1,21 @@
-import { del } from "@vercel/blob";
+import { prisma } from "@/lib/prisma";
 
-/** Vercel Blob read-write token, kept in code rather than an env variable.
- * Anyone who can read this file can write to and delete from the store. */
-export const BLOB_TOKEN = "vercel_blob_rw_Hgv5Am4ywGF9b9bR_iBFZ1FoZbfkVaYcwtpJanIyxBIOeDV";
+/** Uploaded images live in the UploadedImage table and are served from here. */
+const UPLOAD_PATH = "/api/uploads/";
 
-/** Blob URLs look like https://<store>.public.blob.vercel-storage.com/uploads/… */
-function isBlobUrl(url: string) {
-  try {
-    return new URL(url).hostname.endsWith(".blob.vercel-storage.com");
-  } catch {
-    return false;
-  }
+export function uploadUrl(id: string) {
+  return `${UPLOAD_PATH}${id}`;
+}
+
+/** Upload URLs look like /api/uploads/<id>; returns the id, or null for anything else. */
+function uploadId(url: string) {
+  return url.startsWith(UPLOAD_PATH) ? url.slice(UPLOAD_PATH.length) || null : null;
 }
 
 /** Removes an uploaded image once nothing points at it. URLs that aren't uploads
  * (e.g. /assets/room.jpg) are left alone, and a failed delete never blocks a save. */
 export async function deleteUploadedImage(url: string | null | undefined) {
-  if (!url || !isBlobUrl(url)) return;
-  await del(url, { token: BLOB_TOKEN }).catch(() => undefined);
+  const id = url ? uploadId(url) : null;
+  if (!id) return;
+  await prisma.uploadedImage.deleteMany({ where: { id } }).catch(() => undefined);
 }

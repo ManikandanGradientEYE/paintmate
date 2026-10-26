@@ -44,7 +44,9 @@ Until October 2026 the data lived in Neon Postgres; it was copied over with
 5. Deploy, connect the domain, then verify: storefront loads, `/admin/login` works, a
    test quote shows up in `/admin/leads`.
 
-Admin image uploads go to Vercel Blob; the store's token is set in `lib/uploads.ts`.
+Admin image uploads are stored in MySQL (`UploadedImage`) and served publicly from
+`/api/uploads/<id>`, so they survive redeploys and are part of every database backup.
+They used to live on Vercel Blob; `scripts/blob-to-mysql.ts` moved them over.
 
 **Ongoing changes**: whenever you change `prisma/schema.prisma`, run
 `npm run db:migrate` locally (against the same MySQL database) to create and apply the

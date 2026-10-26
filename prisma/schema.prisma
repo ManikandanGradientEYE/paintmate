@@ -143,3 +143,13 @@ model SocialLink {
   url       String @db.Text
   sortOrder Int    @default(0)
 }
+
+/// An image uploaded from the admin panel, stored in the database itself so it survives
+/// redeploys (a Hostinger Node.js app's own files are replaced on every upload). Served
+/// publicly at /api/uploads/<id>; the admin UI resizes images first, so rows stay small.
+model UploadedImage {
+  id          String   @id @default(cuid())
+  contentType String
+  data        Bytes    @db.MediumBlob
+  createdAt   DateTime @default(now())
+}
