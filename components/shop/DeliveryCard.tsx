@@ -3,10 +3,20 @@
 import { useState } from "react";
 import { useQuote } from "@/context/QuoteContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { buildQuoteMessage, whatsAppUrl } from "@/lib/whatsapp";
 
 export default function DeliveryCard() {
-  const { state, dispatch, isInLudhiana, submitLead } = useQuote();
-  const { t } = useLanguage();
+  const {
+    state,
+    dispatch,
+    isInLudhiana,
+    submitLead,
+    selectedPaint,
+    selectedShade,
+    estimate,
+    pricingSettings,
+  } = useQuote();
+  const { language, t } = useLanguage();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle"
   );
@@ -25,13 +35,28 @@ export default function DeliveryCard() {
 
     setStatus("submitting");
     setServerError(null);
+    // Save the lead for /admin/leads, then hand the quote over on WhatsApp either way:
+    // a failed save must not stop the customer reaching us. Same-tab navigation, since
+    // a new tab opened after an await is blocked as a pop-up on phones.
     const result = await submitLead();
-    if (result.ok) {
-      setStatus("success");
-    } else {
-      setStatus("error");
-      setServerError(result.error);
-    }
+    if (!result.ok) console.error("Lead not saved:", result.error);
+    setStatus("success");
+    window.location.href = whatsAppUrl(
+      buildQuoteMessage({
+        language,
+        name: state.contact.name,
+        locality: state.locality,
+        areaSqft: state.areaSqft,
+        surface: state.surface,
+        coats: state.coats,
+        paint: selectedPaint,
+        shade: selectedShade,
+        customShade: state.customShade,
+        addOns: state.addOns,
+        estimate,
+        settings: pricingSettings,
+      })
+    );
   }
 
   if (status === "success") {
